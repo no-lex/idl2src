@@ -1,0 +1,5 @@
+*.o
+idl2src
+*.srctrldb
+*.srctrlprj
+*.srctrlbms
