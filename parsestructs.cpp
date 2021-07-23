@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #include "parsegdl.h"
 #include "parsestructs.h"
@@ -24,6 +25,7 @@ sourcetrail::SourcetrailDBWriter *createdb()
 
 void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer)
 {
+    std::vector<int> ids;
     int fileId = writer->recordFile("source_array_import.pro");
     for(uint i = 0; i < data.functions.size(); ++i)
     {
@@ -33,19 +35,33 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer)
             paramstring.append(data.functions.at(i).params.at(j)).append(", ");
         }
         std::string fnname = data.functions.at(i).name;
+
         int fid = writer->recordSymbol({ "::", { { "function", fnname, paramstring } } });
+
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::METHOD);
-
+        ids.push_back(fid);
+    }
+    //indirectly referenced functions
+    for(uint i = 0; i < data.functions.size(); ++i)
+    {
         for(uint j = 0; j < data.functions.at(i).fn_references.size(); ++j)
         {
             std::string refname = data.functions.at(i).fn_references.at(j);
-            int id = writer->recordSymbol({ "::", { { "function", refname, ""} } });
-            writer->recordSymbolKind(id, sourcetrail::SymbolKind::METHOD);
-            writer->recordReference(fid, id, sourcetrail::ReferenceKind::CALL);
+            if(std::find(data.functions.begin(), data.functions.end(), refname) != data.functions.end())
+            {
+                int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname));
+                writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
+            }
+            else
+            {
+                int id = writer->recordSymbol({ "::", { { "function", refname, ""} } });
+                writer->recordSymbolKind(id, sourcetrail::SymbolKind::METHOD);
+                writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
+            }
         }
-        sourcetrail::SourceRange range = { fileId, data.functions.at(i).loc, 1, data.functions.at(i).loc, 9+fnname.size()};
-        writer->recordReferenceLocation(fid, range);
+        sourcetrail::SourceRange range = { fileId, data.functions.at(i).loc, 1, data.functions.at(i).loc, 9};
+        writer->recordReferenceLocation(ids[i], range);
     }
 }
 

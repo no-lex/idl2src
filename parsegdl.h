@@ -16,6 +16,11 @@ class abstract_function
             params = args;
             fn_references = references;
         }
+
+        bool operator==(std::string cmp)
+        {
+            return this->name == cmp;
+        }
 };
 
 //a representation of a keyword
