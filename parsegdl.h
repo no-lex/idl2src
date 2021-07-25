@@ -3,18 +3,20 @@ class abstract_function
 {
     public:
         std::vector<std::string> fn_references;
+        std::vector<int> fn_refs_loc;
         std::vector<std::string> params;
         int loc;
         int size;
         std::string file;
         std::string name;
 
-        abstract_function(int location, std::string funcname, std::vector<std::string> args, std::vector<std::string> references)
+        abstract_function(int location, std::string funcname, std::vector<std::string> args, std::vector<std::string> references, std::vector<int> refs_loc)
         {
             loc = location;
             name = funcname;
             params = args;
             fn_references = references;
+            fn_refs_loc = refs_loc;
         }
 
         bool operator==(std::string cmp)

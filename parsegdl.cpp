@@ -54,6 +54,13 @@ std::string getfunctioncall(std::string line)
     return line;
 
 }
+int getfunctioncallline(std::string line)
+{
+    line.erase(line.begin(), line.end() - 3);
+    line.erase(line.end() - 1, line.end());
+    return std::stoi(line);
+}
+
 int getfunctionline(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find("("));
@@ -113,16 +120,19 @@ codedata parseast()
             std::cout << "size " << bodystart << " " << bodyend << "\n";
 
             std::vector<std::string> references;
+            std::vector<int> refs_loc;
             for(uint j = 0; j < fxnbody.size(); ++j)
             {
                 if(fxnbody.at(j).find("fcall") != std::string::npos)
                 {
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
+                    std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
                     references.emplace_back(getfunctioncall(fxnbody.at(j)));
+                    refs_loc.emplace_back(getfunctioncallline(fxnbody.at(j)));
                 }
             }
             //commit to object
-            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)), getfunctionname(file.at(i)), args, references));
+            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)), getfunctionname(file.at(i)), args, references, refs_loc));
         }
     }
     return output;

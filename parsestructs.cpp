@@ -51,13 +51,15 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer)
             if(std::find(data.functions.begin(), data.functions.end(), refname) != data.functions.end())
             {
                 int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname));
-                writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
+                int refid = writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
+                writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_refs_loc.at(j), 1, data.functions.at(i).fn_refs_loc.at(j), 10});
             }
             else
             {
                 int id = writer->recordSymbol({ "::", { { "function", refname, ""} } });
                 writer->recordSymbolKind(id, sourcetrail::SymbolKind::METHOD);
-                writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
+                int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
+                writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_refs_loc.at(j), 1, data.functions.at(i).fn_refs_loc.at(j), 10});
             }
         }
         sourcetrail::SourceRange range = { fileId, data.functions.at(i).loc, 1, data.functions.at(i).loc, 9};
