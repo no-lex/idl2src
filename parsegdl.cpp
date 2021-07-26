@@ -56,7 +56,8 @@ std::string getfunctioncall(std::string line)
 }
 int getfunctioncallline(std::string line)
 {
-    line.erase(line.begin(), line.end() - 3);
+    line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find("("));
     line.erase(line.end() - 1, line.end());
     return std::stoi(line);
 }
@@ -123,7 +124,7 @@ codedata parseast(std::string name)
             std::vector<int> refs_loc;
             for(uint j = 0; j < fxnbody.size(); ++j)
             {
-                if(fxnbody.at(j).find("fcall") != std::string::npos)
+                if((fxnbody.at(j).find("fcall") != std::string::npos) || (fxnbody.at(j).find("pcall") != std::string::npos))
                 {
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
