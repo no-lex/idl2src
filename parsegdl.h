@@ -49,6 +49,6 @@ class codedata
 };
 
 //returns a codedata() object representing the structure of the codebase
-extern codedata parseast();
+extern codedata parseast(std::string name);
 
 

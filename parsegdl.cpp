@@ -10,12 +10,12 @@
 
 #include "parsegdl.h"
 
-std::vector<std::string> loadfile()
+std::vector<std::string> loadfile(std::string name)
 {
     std::vector<std::string> output;
     std::string line;
     std::ifstream myfile;
-    myfile.open("myfile.txt");
+    myfile.open(name);
 
     if(!myfile.is_open())
     {
@@ -68,10 +68,10 @@ int getfunctionline(std::string line)
     return std::stoi(line);
 }
 
-codedata parseast()
+codedata parseast(std::string name)
 {
     codedata output;
-    std::vector<std::string> file = loadfile();
+    std::vector<std::string> file = loadfile(name);
     std::vector<std::string> args(0);
 
     for(uint i = 0; i < file.size(); ++i)

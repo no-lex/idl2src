@@ -9,10 +9,12 @@
 #include "parsegdl.h"
 #include "parsestructs.h"
 
+static const std::string name = "myfile.txt";
+
 int main(int argc, char **argv)
 {
     sourcetrail::SourcetrailDBWriter *writer = createdb();
-    codedata data = parseast();
+    codedata data = parseast(name);
     parse(data, writer);
     closedb(writer);
 }
