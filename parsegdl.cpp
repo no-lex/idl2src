@@ -133,7 +133,7 @@ codedata parseast(std::string name)
                 }
             }
             //commit to object
-            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)), getfunctionname(file.at(i)), args, references, refs_loc));
+            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)), name, getfunctionname(file.at(i)), args, references, refs_loc));
         }
     }
     return output;

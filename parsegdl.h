@@ -10,9 +10,10 @@ class abstract_function
         std::string file;
         std::string name;
 
-        abstract_function(int location, std::string funcname, std::vector<std::string> args, std::vector<std::string> references, std::vector<int> refs_loc)
+        abstract_function(int location, std::string filename, std::string funcname, std::vector<std::string> args, std::vector<std::string> references, std::vector<int> refs_loc)
         {
             loc = location;
+            file = filename;
             name = funcname;
             params = args;
             fn_references = references;
