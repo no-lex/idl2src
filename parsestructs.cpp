@@ -23,12 +23,20 @@ sourcetrail::SourcetrailDBWriter *createdb()
     return writer;
 }
 
-void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer)
+//returns the string for a code file name given an ast file name
+std::string getname(std::string ast, files file)
+{
+    int loc = std::distance(file.asts.begin(), std::find(file.asts.begin(), file.asts.end(), ast));
+    return file.codes.at(loc);
+}
+
+
+void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 {
     std::vector<int> ids;
-    int fileId = writer->recordFile("source_array_import.pro");
     for(uint i = 0; i < data.functions.size(); ++i)
     {
+        int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
         std::string paramstring = ": ";
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
         {
@@ -45,6 +53,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer)
     //indirectly referenced functions
     for(uint i = 0; i < data.functions.size(); ++i)
     {
+        int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
         for(uint j = 0; j < data.functions.at(i).fn_references.size(); ++j)
         {
             std::string refname = data.functions.at(i).fn_references.at(j);

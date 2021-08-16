@@ -69,9 +69,8 @@ int getfunctionline(std::string line)
     return std::stoi(line);
 }
 
-codedata parseast(std::string name)
+codedata parseast(std::string name, codedata output)
 {
-    codedata output;
     std::vector<std::string> file = loadfile(name);
     std::vector<std::string> args(0);
 
@@ -124,7 +123,7 @@ codedata parseast(std::string name)
             std::vector<int> refs_loc;
             for(uint j = 0; j < fxnbody.size(); ++j)
             {
-                if((fxnbody.at(j).find("fcall") != std::string::npos) || (fxnbody.at(j).find("pcall") != std::string::npos))
+                if((fxnbody.at(j).find("]fcall") != std::string::npos) || (fxnbody.at(j).find("]pcall") != std::string::npos))
                 {
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";

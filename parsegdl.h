@@ -26,6 +26,12 @@ class abstract_function
         }
 };
 
+struct files
+{
+    std::vector<std::string> asts;
+    std::vector<std::string> codes;
+};
+
 //a representation of a keyword
 class abstract_keyword
 {
@@ -50,6 +56,6 @@ class codedata
 };
 
 //returns a codedata() object representing the structure of the codebase
-extern codedata parseast(std::string name);
+extern codedata parseast(std::string name, codedata output);
 
 
