@@ -1,0 +1,713 @@
+<[111:0]FUNCTION(1) [92:0]SOURCE_ARRAY_IMPORT(1)
+  <[66:0]paradecl(1)
+    <[46:0]keydecl(1) [92:0]FILE_PATH(1) [92:0]FILE_PATH(1) >
+    <[46:0]keydecl(1) [92:0]NO_EXTEND(1) [92:0]NO_EXTEND(1) >
+    <[46:0]keydecl(2) [92:0]ID_COLUMN(2) [92:0]ID_COLUMN(2) >
+    <[46:0]keydecl(2) [92:0]X_COLUMN(2) [92:0]X_COLUMN(2) >
+    <[46:0]keydecl(2) [92:0]Y_COLUMN(2) [92:0]Y_COLUMN(2) >
+    <[46:0]keydecl(2) [92:0]RA_COLUMN(2) [92:0]RA_COLUMN(2) >
+    <[46:0]keydecl(2) [92:0]DEC_COLUMN(2) [92:0]DEC_COLUMN(2) >
+    <[46:0]keydecl(3) [92:0]STON_COLUMN(3) [92:0]STON_COLUMN(3) >
+    <[46:0]keydecl(3) [92:0]FREQUENCY_COLUMN(3) [92:0]FREQUENCY_COLUMN(3) >
+    <[46:0]keydecl(3) [92:0]FLAG_COLUM(3) [92:0]FLAG_COLUMN(3) >
+    <[46:0]keydecl(3) [92:0]PARENT_COLUMN(3) [92:0]PARENT_COLUMN(3) >
+    <[46:0]keydecl(4) [92:0]FLUX_XX_COLUMN(4) [92:0]FLUX_XX_COLUMN(4) >
+    <[46:0]keydecl(4) [92:0]FLUX_YY_COLUMN(4) [92:0]FLUX_YY_COLUMN(4) >
+    <[46:0]keydecl(5) [92:0]FLUX_XY_COLUMN(5) [92:0]FLUX_XY_COLUMN(5) >
+    <[46:0]keydecl(5) [92:0]FLUX_YX_COLUMN(5) [92:0]FLUX_YX_COLUMN(5) >
+    <[46:0]keydecl(6) [92:0]FLUX_I_COLUMN(6) [92:0]FLUX_I_COLUMN(6) >
+    <[46:0]keydecl(6) [92:0]FLUX_Q_COLUMN(6) [92:0]FLUX_Q_COLUMN(6) >
+    <[46:0]keydecl(7) [92:0]FLUX_U_COLUMN(7) [92:0]FLUX_U_COLUMN(7) >
+    <[46:0]keydecl(7) [92:0]FLUX_V_COLUMN(7) [92:0]FLUX_V_COLUMN(7) >
+    <[46:0]keydecl(7) [92:0]_EXTRA(7) [92:0]EXTRA(7) >
+  >
+  <[64:0]pcall(9) [92:0]TEXTFAST(9)
+    <[89:0]VAR(9) [92:0]SOURCE_ARRAY(9) >
+    <[89:0]VAR(9) [92:0]HEADER(9) >
+    <[47:0]!=!(9) [92:0]FIRST_LINE(9) [27:0x55c72ddef460]1(9) >
+    <[47:0]!=!(9) [92:0]FILE_PATH(9)
+      <[89:0]VAR(9) [92:0]FILE_PATH(9) >
+    >
+    <[47:0]!=!(9) [92:0]READ(9) [27:0x55c72ddef380]1(9) >
+  >
+  <[5:0]:=(10)
+    <[89:0]VAR(10) [92:0]ID_COLUMN(10) >
+    <[39:0]fcall(10) [92:0]HEADER_COLUMN(10)
+      <[89:0]VAR(10) [92:0]HEADER(10) >
+      <[47:0]!=!(10) [92:0]COLUMN_USE(10)
+        <[89:0]VAR(10) [92:0]ID_COLUMN(10) >
+      >
+      <[47:0]!=!(10) [92:0]COLNAME(10) [27:0x7fa2603a1a78]#id(10) >
+    >
+  >
+  <[5:0]:=(11)
+    <[89:0]VAR(11) [92:0]X_COLUMN(11) >
+    <[39:0]fcall(11) [92:0]HEADER_COLUMN(11)
+      <[89:0]VAR(11) [92:0]HEADER(11) >
+      <[47:0]!=!(11) [92:0]COLUMN_USE(11)
+        <[89:0]VAR(11) [92:0]X_COLUMN(11) >
+      >
+      <[47:0]!=!(11) [92:0]COLNAME(11) [27:0x7fa2603a1670]x_loc(11) >
+    >
+  >
+  <[5:0]:=(12)
+    <[89:0]VAR(12) [92:0]Y_COLUMN(12) >
+    <[39:0]fcall(12) [92:0]HEADER_COLUMN(12)
+      <[89:0]VAR(12) [92:0]HEADER(12) >
+      <[47:0]!=!(12) [92:0]COLUMN_USE(12)
+        <[89:0]VAR(12) [92:0]Y_COLUMN(12) >
+      >
+      <[47:0]!=!(12) [92:0]COLNAME(12) [27:0x7fa2603a0a58]y_loc(12) >
+    >
+  >
+  <[5:0]:=(13)
+    <[89:0]VAR(13) [92:0]RA_COLUMN(13) >
+    <[39:0]fcall(13) [92:0]HEADER_COLUMN(13)
+      <[89:0]VAR(13) [92:0]HEADER(13) >
+      <[47:0]!=!(13) [92:0]COLUMN_USE(13)
+        <[89:0]VAR(13) [92:0]RA_COLUMN(13) >
+      >
+      <[47:0]!=!(13) [92:0]COLNAME(13) [27:0x7fa2603a0650]RA(13) >
+    >
+  >
+  <[5:0]:=(14)
+    <[89:0]VAR(14) [92:0]DEC_COLUMN(14) >
+    <[39:0]fcall(14) [92:0]HEADER_COLUMN(14)
+      <[89:0]VAR(14) [92:0]HEADER(14) >
+      <[47:0]!=!(14) [92:0]COLUMN_USE(14)
+        <[89:0]VAR(14) [92:0]DEC_COLUMN(14) >
+      >
+      <[47:0]!=!(14) [92:0]COLNAME(14) [27:0x7fa2603a0248]Dec(14) >
+    >
+  >
+  <[5:0]:=(15)
+    <[89:0]VAR(15) [92:0]STON_COLUMN(15) >
+    <[39:0]fcall(15) [92:0]HEADER_COLUMN(15)
+      <[89:0]VAR(15) [92:0]HEADER(15) >
+      <[47:0]!=!(15) [92:0]COLUMN_USE(15)
+        <[89:0]VAR(15) [92:0]STON_COLUMN(15) >
+      >
+      <[47:0]!=!(15) [92:0]COLNAME(15) [27:0x7fa26039fe40]S/N(15) >
+    >
+  >
+  <[5:0]:=(16)
+    <[89:0]VAR(16) [92:0]FREQUENCY_COLUMN(16) >
+    <[39:0]fcall(16) [92:0]HEADER_COLUMN(16)
+      <[89:0]VAR(16) [92:0]HEADER(16) >
+      <[47:0]!=!(16) [92:0]COLUMN_USE(16)
+        <[89:0]VAR(16) [92:0]FREQUENCY_COLUMN(16) >
+      >
+      <[47:0]!=!(16) [92:0]COLNAME(16) [27:0x7fa26039fa38]frequency(16) >
+    >
+  >
+  <[5:0]:=(17)
+    <[89:0]VAR(17) [92:0]FLAG_COLUMN(17) >
+    <[39:0]fcall(17) [92:0]HEADER_COLUMN(17)
+      <[89:0]VAR(17) [92:0]HEADER(17) >
+      <[47:0]!=!(17) [92:0]COLUMN_USE(17)
+        <[89:0]VAR(17) [92:0]FLAG_COLUMN(17) >
+      >
+      <[47:0]!=!(17) [92:0]COLNAME(17) [27:0x7fa26039f630]Flag(17) >
+    >
+  >
+  <[5:0]:=(18)
+    <[89:0]VAR(18) [92:0]PARENT_COLUMN(18) >
+    <[39:0]fcall(18) [92:0]HEADER_COLUMN(18)
+      <[89:0]VAR(18) [92:0]HEADER(18) >
+      <[47:0]!=!(18) [92:0]COLUMN_USE(18)
+        <[89:0]VAR(18) [92:0]PARENT_COLUMN(18) >
+      >
+      <[47:0]!=!(18) [92:0]COLNAME(18) [27:0x7fa26039f228]Parent(18) >
+    >
+  >
+  <[5:0]:=(20)
+    <[89:0]VAR(20) [92:0]FLUX_XX_COLUMN(20) >
+    <[39:0]fcall(20) [92:0]HEADER_COLUMN(20)
+      <[89:0]VAR(20) [92:0]HEADER(20) >
+      <[47:0]!=!(20) [92:0]COLUMN_USE(20)
+        <[89:0]VAR(20) [92:0]FLUX_XX_COLUMN(20) >
+      >
+      <[47:0]!=!(20) [92:0]COLNAME(20) [27:0x7fa26039ee20]XX_apparent(20) >
+    >
+  >
+  <[5:0]:=(21)
+    <[89:0]VAR(21) [92:0]FLUX_YY_COLUMN(21) >
+    <[39:0]fcall(21) [92:0]HEADER_COLUMN(21)
+      <[89:0]VAR(21) [92:0]HEADER(21) >
+      <[47:0]!=!(21) [92:0]COLUMN_USE(21)
+        <[89:0]VAR(21) [92:0]FLUX_YY_COLUMN(21) >
+      >
+      <[47:0]!=!(21) [92:0]COLNAME(21) [27:0x7fa26039ada0]YY_apparent(21) >
+    >
+  >
+  <[5:0]:=(22)
+    <[89:0]VAR(22) [92:0]FLUX_XY_COLUMN(22) >
+    <[39:0]fcall(22) [92:0]HEADER_COLUMN(22)
+      <[89:0]VAR(22) [92:0]HEADER(22) >
+      <[47:0]!=!(22) [92:0]COLUMN_USE(22)
+        <[89:0]VAR(22) [92:0]FLUX_XY_COLUMN(22) >
+      >
+      <[47:0]!=!(22) [92:0]COLNAME(22) [27:0x7fa26039a998]XY_apparent(22) >
+    >
+  >
+  <[5:0]:=(23)
+    <[89:0]VAR(23) [92:0]FLUX_YX_COLUMN(23) >
+    <[39:0]fcall(23) [92:0]HEADER_COLUMN(23)
+      <[89:0]VAR(23) [92:0]HEADER(23) >
+      <[47:0]!=!(23) [92:0]COLUMN_USE(23)
+        <[89:0]VAR(23) [92:0]FLUX_YX_COLUMN(23) >
+      >
+      <[47:0]!=!(23) [92:0]COLNAME(23) [27:0x7fa26039a590]YX_apparent(23) >
+    >
+  >
+  <[5:0]:=(24)
+    <[89:0]VAR(24) [92:0]FLUX_I_COLUMN(24) >
+    <[39:0]fcall(24) [92:0]HEADER_COLUMN(24)
+      <[89:0]VAR(24) [92:0]HEADER(24) >
+      <[47:0]!=!(24) [92:0]COLUMN_USE(24)
+        <[89:0]VAR(24) [92:0]FLUX_I_COLUMN(24) >
+      >
+      <[47:0]!=!(24) [92:0]COLNAME(24) [27:0x7fa26039a188]Stokes_I(24) >
+    >
+  >
+  <[5:0]:=(25)
+    <[89:0]VAR(25) [92:0]FLUX_Q_COLUMN(25) >
+    <[39:0]fcall(25) [92:0]HEADER_COLUMN(25)
+      <[89:0]VAR(25) [92:0]HEADER(25) >
+      <[47:0]!=!(25) [92:0]COLUMN_USE(25)
+        <[89:0]VAR(25) [92:0]FLUX_Q_COLUMN(25) >
+      >
+      <[47:0]!=!(25) [92:0]COLNAME(25) [27:0x7fa260399d80]Stokes_Q(25) >
+    >
+  >
+  <[5:0]:=(26)
+    <[89:0]VAR(26) [92:0]FLUX_U_COLUMN(26) >
+    <[39:0]fcall(26) [92:0]HEADER_COLUMN(26)
+      <[89:0]VAR(26) [92:0]HEADER(26) >
+      <[47:0]!=!(26) [92:0]COLUMN_USE(26)
+        <[89:0]VAR(26) [92:0]FLUX_U_COLUMN(26) >
+      >
+      <[47:0]!=!(26) [92:0]COLNAME(26) [27:0x7fa260399978]Stokes_U(26) >
+    >
+  >
+  <[5:0]:=(27)
+    <[89:0]VAR(27) [92:0]FLUX_V_COLUMN(27) >
+    <[39:0]fcall(27) [92:0]HEADER_COLUMN(27)
+      <[89:0]VAR(27) [92:0]HEADER(27) >
+      <[47:0]!=!(27) [92:0]COLUMN_USE(27)
+        <[89:0]VAR(27) [92:0]FLUX_V_COLUMN(27) >
+      >
+      <[47:0]!=!(27) [92:0]COLNAME(27) [27:0x7fa260399570]Stokes_V(27) >
+    >
+  >
+  <[5:0]:=(29)
+    <[89:0]VAR(29) [92:0]PARENT_ID(29) >
+    <[39:0]fcall(29) [92:0]REFORM(29)
+      <[18:0]arrayexpr(29)
+        <[89:0]VAR(29) [92:0]SOURCE_ARRAY(29) >
+        <[12:0]arrayix(29)
+          <[89:0]VAR(29) [92:0]PARENT_COLUMN(29) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(30)
+    <[89:0]VAR(30) [92:0]PARENT_I(30) >
+    <[39:0]fcall(30) [92:0]WHERE(30)
+      <[109:0]EQ(30)
+        <[89:0]VAR(30) [92:0]PARENT_ID(30) >
+        <[88:0]u-(30) [27:0x55c72ddef2a0]1(30) >
+      >
+      <[89:0]VAR(30) [92:0]N_PARENT(30) >
+    >
+  >
+  <[5:0]:=(32)
+    <[89:0]VAR(32) [92:0]SOURCE_ARRAY_OUT(32) >
+    <[39:0]fcall(32) [92:0]SOURCE_ARRAY_IMPORT_SUBROUTINE(32)
+      <[18:0]arrayexpr(32)
+        <[89:0]VAR(32) [92:0]SOURCE_ARRAY(32) >
+        <[12:0]arrayix(0) [4:0]*(0) >
+        <[12:0]arrayix(32)
+          <[89:0]VAR(32) [92:0]PARENT_I(32) >
+        >
+      >
+      <[47:0]!=!(33) [92:0]ID_COLUMN(33)
+        <[89:0]VAR(33) [92:0]ID_COLUMN(33) >
+      >
+      <[47:0]!=!(33) [92:0]X_COLUMN(33)
+        <[89:0]VAR(33) [92:0]X_COLUMN(33) >
+      >
+      <[47:0]!=!(33) [92:0]Y_COLUMN(33)
+        <[89:0]VAR(33) [92:0]Y_COLUMN(33) >
+      >
+      <[47:0]!=!(33) [92:0]RA_COLUMN(33)
+        <[89:0]VAR(33) [92:0]RA_COLUMN(33) >
+      >
+      <[47:0]!=!(33) [92:0]DEC_COLUMN(33)
+        <[89:0]VAR(33) [92:0]DEC_COLUMN(33) >
+      >
+      <[47:0]!=!(34) [92:0]STON_COLUMN(34)
+        <[89:0]VAR(34) [92:0]STON_COLUMN(34) >
+      >
+      <[47:0]!=!(34) [92:0]FREQUENCY_COLUMN(34)
+        <[89:0]VAR(34) [92:0]FREQUENCY_COLUMN(34) >
+      >
+      <[47:0]!=!(34) [92:0]FLAG_COLUM(34)
+        <[89:0]VAR(34) [92:0]FLAG_COLUMN(34) >
+      >
+      <[47:0]!=!(34) [92:0]PARENT_COLUMN(34)
+        <[89:0]VAR(34) [92:0]PARENT_COLUMN(34) >
+      >
+      <[47:0]!=!(35) [92:0]FLUX_XX_COLUMN(35)
+        <[89:0]VAR(35) [92:0]FLUX_XX_COLUMN(35) >
+      >
+      <[47:0]!=!(35) [92:0]FLUX_YY_COLUMN(35)
+        <[89:0]VAR(35) [92:0]FLUX_YY_COLUMN(35) >
+      >
+      <[47:0]!=!(36) [92:0]FLUX_XY_COLUMN(36)
+        <[89:0]VAR(36) [92:0]FLUX_XY_COLUMN(36) >
+      >
+      <[47:0]!=!(36) [92:0]FLUX_YX_COLUMN(36)
+        <[89:0]VAR(36) [92:0]FLUX_YX_COLUMN(36) >
+      >
+      <[47:0]!=!(37) [92:0]FLUX_I_COLUMN(37)
+        <[89:0]VAR(37) [92:0]FLUX_I_COLUMN(37) >
+      >
+      <[47:0]!=!(37) [92:0]FLUX_Q_COLUMN(37)
+        <[89:0]VAR(37) [92:0]FLUX_Q_COLUMN(37) >
+      >
+      <[47:0]!=!(38) [92:0]FLUX_U_COLUMN(38)
+        <[89:0]VAR(38) [92:0]FLUX_U_COLUMN(38) >
+      >
+      <[47:0]!=!(38) [92:0]FLUX_V_COLUMN(38)
+        <[89:0]VAR(38) [92:0]FLUX_V_COLUMN(38) >
+      >
+    >
+  >
+  <[5:0]:=(40)
+    <[89:0]VAR(40) [92:0]EXTEND_I(40) >
+    <[39:0]fcall(40) [92:0]WHERE(40)
+      <[112:0]GE(40)
+        <[89:0]VAR(40) [92:0]PARENT_ID(40) >[27:0x55c72ddef1c0]0(40)
+      >
+      <[89:0]VAR(40) [92:0]N_EXTEND(40) >
+    >
+  >
+  <[115:0]IF(41)
+    <[39:0]fcall(41) [92:0]KEYWORD_SET(41)
+      <[89:0]VAR(41) [92:0]NO_EXTEND(41) >
+    >
+    <[5:0]:=(41)
+      <[89:0]VAR(41) [92:0]N_EXTEND(41) >[27:0x55c72ddef0e0]0(41)
+    >
+  >
+  <[115:0]IF(42)
+    <[114:0]GT(42)
+      <[89:0]VAR(42) [92:0]N_EXTEND(42) >[27:0x55c72ddef000]0(42)
+    >
+    <[21:0]block(43)
+      <[5:0]:=(43)
+        <[89:0]VAR(43) [92:0]PARENT_HIST(43) >
+        <[39:0]fcall(43) [92:0]HISTOGRAM(43)
+          <[89:0]VAR(43) [92:0]PARENT_ID(43) >
+          <[47:0]!=!(43) [92:0]BINSIZE(43) [27:0x55c72ddeef20]1(43) >
+          <[47:0]!=!(43) [92:0]REVERSE_INDICES(43)
+            <[89:0]VAR(43) [92:0]RI(43) >
+          >
+          <[47:0]!=!(43) [92:0]MIN(43) [27:0x55c72ddeee40]0(43) >
+        >
+      >
+      <[5:0]:=(44)
+        <[89:0]VAR(44) [92:0]PARENT_I_USE(44) >
+        <[39:0]fcall(44) [92:0]WHERE(44)
+          <[89:0]VAR(44) [92:0]PARENT_HIST(44) >
+          <[89:0]VAR(44) [92:0]N_PARENT_USE(44) >
+        >
+      >
+      <[31:0]FOR(45) [92:0]I(45) [27:0x55c72ddeed60]0(45)
+        <[211:0]-(45)
+          <[89:0]VAR(45) [92:0]N_PARENT_USE(45) >[27:0x55c72ddeec80]1(45)
+        >
+        <[21:0]block(46)
+          <[5:0]:=(46)
+            <[89:0]VAR(46) [92:0]P_I(46) >
+            <[18:0]arrayexpr(46)
+              <[89:0]VAR(46) [92:0]PARENT_I_USE(46) >
+              <[12:0]arrayix(46)
+                <[89:0]VAR(46) [92:0]I(46) >
+              >
+            >
+          >
+          <[5:0]:=(47)
+            <[89:0]VAR(47) [92:0]EXT_I_USE(47) >
+            <[18:0]arrayexpr(47)
+              <[89:0]VAR(47) [92:0]RI(47) >
+              <[12:0]arrayix(47)
+                <[18:0]arrayexpr(47)
+                  <[89:0]VAR(47) [92:0]RI(47) >
+                  <[12:0]arrayix(47)
+                    <[89:0]VAR(47) [92:0]P_I(47) >
+                  >
+                >
+                <[211:0]-(47)
+                  <[18:0]arrayexpr(47)
+                    <[89:0]VAR(47) [92:0]RI(47) >
+                    <[12:0]arrayix(47)
+                      <[210:0]+(47)
+                        <[89:0]VAR(47) [92:0]P_I(47) >[27:0x55c72ddeeba0]1(47)
+                      >
+                    >
+                  >[27:0x55c72ddeeac0]1(47)
+                >
+              >
+            >
+          >
+          <[5:0]:=(48)
+            <[89:0]VAR(48) [92:0]SA(48) >
+            <[39:0]fcall(48) [92:0]SOURCE_ARRAY_IMPORT_SUBROUTINE(48)
+              <[18:0]arrayexpr(48)
+                <[89:0]VAR(48) [92:0]SOURCE_ARRAY(48) >
+                <[12:0]arrayix(0) [4:0]*(0) >
+                <[12:0]arrayix(48)
+                  <[89:0]VAR(48) [92:0]EXT_I_USE(48) >
+                >
+              >
+              <[47:0]!=!(49) [92:0]ID_COLUMN(49)
+                <[89:0]VAR(49) [92:0]ID_COLUMN(49) >
+              >
+              <[47:0]!=!(49) [92:0]X_COLUMN(49)
+                <[89:0]VAR(49) [92:0]X_COLUMN(49) >
+              >
+              <[47:0]!=!(49) [92:0]Y_COLUMN(49)
+                <[89:0]VAR(49) [92:0]Y_COLUMN(49) >
+              >
+              <[47:0]!=!(49) [92:0]RA_COLUMN(49)
+                <[89:0]VAR(49) [92:0]RA_COLUMN(49) >
+              >
+              <[47:0]!=!(49) [92:0]DEC_COLUMN(49)
+                <[89:0]VAR(49) [92:0]DEC_COLUMN(49) >
+              >
+              <[47:0]!=!(50) [92:0]STON_COLUMN(50)
+                <[89:0]VAR(50) [92:0]STON_COLUMN(50) >
+              >
+              <[47:0]!=!(50) [92:0]FREQUENCY_COLUMN(50)
+                <[89:0]VAR(50) [92:0]FREQUENCY_COLUMN(50) >
+              >
+              <[47:0]!=!(50) [92:0]FLAG_COLUM(50)
+                <[89:0]VAR(50) [92:0]FLAG_COLUMN(50) >
+              >
+              <[47:0]!=!(50) [92:0]PARENT_COLUMN(50)
+                <[89:0]VAR(50) [92:0]PARENT_COLUMN(50) >
+              >
+              <[47:0]!=!(51) [92:0]FLUX_XX_COLUMN(51)
+                <[89:0]VAR(51) [92:0]FLUX_XX_COLUMN(51) >
+              >
+              <[47:0]!=!(51) [92:0]FLUX_YY_COLUMN(51)
+                <[89:0]VAR(51) [92:0]FLUX_YY_COLUMN(51) >
+              >
+              <[47:0]!=!(52) [92:0]FLUX_XY_COLUMN(52)
+                <[89:0]VAR(52) [92:0]FLUX_XY_COLUMN(52) >
+              >
+              <[47:0]!=!(52) [92:0]FLUX_YX_COLUMN(52)
+                <[89:0]VAR(52) [92:0]FLUX_YX_COLUMN(52) >
+              >
+              <[47:0]!=!(53) [92:0]FLUX_I_COLUMN(53)
+                <[89:0]VAR(53) [92:0]FLUX_I_COLUMN(53) >
+              >
+              <[47:0]!=!(53) [92:0]FLUX_Q_COLUMN(53)
+                <[89:0]VAR(53) [92:0]FLUX_Q_COLUMN(53) >
+              >
+              <[47:0]!=!(54) [92:0]FLUX_U_COLUMN(54)
+                <[89:0]VAR(54) [92:0]FLUX_U_COLUMN(54) >
+              >
+              <[47:0]!=!(54) [92:0]FLUX_V_COLUMN(54)
+                <[89:0]VAR(54) [92:0]FLUX_V_COLUMN(54) >
+              >
+            >
+          >
+          <[5:0]:=(55)
+            <[205:0].(55)
+              <[18:0]arrayexpr(55)
+                <[89:0]VAR(55) [92:0]SOURCE_ARRAY_OUT(55) >
+                <[12:0]arrayix(55)
+                  <[89:0]VAR(55) [92:0]P_I(55) >
+                >
+              >[92:0]EXTEND(55)
+            >
+            <[39:0]fcall(55) [92:0]PTR_NEW(55)
+              <[89:0]VAR(55) [92:0]SA(55) >
+            >
+          >
+        >
+      >
+    >
+  >
+  <[83:0]RETURN(59)
+    <[89:0]VAR(59) [92:0]SOURCE_ARRAY_OUT(59) >
+  >
+>
+<[111:0]FUNCTION(62) [92:0]SOURCE_ARRAY_IMPORT_SUBROUTINE(62)
+  <[66:0]paradecl(62) [92:0]SOURCE_ARRAY(62)
+    <[46:0]keydecl(63) [92:0]ID_COLUMN(63) [92:0]ID_COLUMN(63) >
+    <[46:0]keydecl(63) [92:0]X_COLUMN(63) [92:0]X_COLUMN(63) >
+    <[46:0]keydecl(63) [92:0]Y_COLUMN(63) [92:0]Y_COLUMN(63) >
+    <[46:0]keydecl(63) [92:0]RA_COLUMN(63) [92:0]RA_COLUMN(63) >
+    <[46:0]keydecl(63) [92:0]DEC_COLUMN(63) [92:0]DEC_COLUMN(63) >
+    <[46:0]keydecl(64) [92:0]STON_COLUMN(64) [92:0]STON_COLUMN(64) >
+    <[46:0]keydecl(64) [92:0]FREQUENCY_COLUMN(64) [92:0]FREQUENCY_COLUMN(64) >
+    <[46:0]keydecl(64) [92:0]FLAG_COLUM(64) [92:0]FLAG_COLUMN(64) >
+    <[46:0]keydecl(64) [92:0]PARENT_COLUMN(64) [92:0]PARENT_COLUMN(64) >
+    <[46:0]keydecl(65) [92:0]FLUX_XX_COLUMN(65) [92:0]FLUX_XX_COLUMN(65) >
+    <[46:0]keydecl(65) [92:0]FLUX_YY_COLUMN(65) [92:0]FLUX_YY_COLUMN(65) >
+    <[46:0]keydecl(66) [92:0]FLUX_XY_COLUMN(66) [92:0]FLUX_XY_COLUMN(66) >
+    <[46:0]keydecl(66) [92:0]FLUX_YX_COLUMN(66) [92:0]FLUX_YX_COLUMN(66) >
+    <[46:0]keydecl(67) [92:0]FLUX_I_COLUMN(67) [92:0]FLUX_I_COLUMN(67) >
+    <[46:0]keydecl(67) [92:0]FLUX_Q_COLUMN(67) [92:0]FLUX_Q_COLUMN(67) >
+    <[46:0]keydecl(68) [92:0]FLUX_U_COLUMN(68) [92:0]FLUX_U_COLUMN(68) >
+    <[46:0]keydecl(68) [92:0]FLUX_V_COLUMN(68) [92:0]FLUX_V_COLUMN(68) >
+  >
+  <[5:0]:=(71)
+    <[89:0]VAR(71) [92:0]SA(71) >
+    <[39:0]fcall(71) [92:0]SOURCE_COMP_INIT(71)
+      <[47:0]!=!(71) [92:0]XVALS(71)
+        <[39:0]fcall(71) [92:0]REFORM(71)
+          <[18:0]arrayexpr(71)
+            <[89:0]VAR(71) [92:0]SOURCE_ARRAY(71) >
+            <[12:0]arrayix(71)
+              <[89:0]VAR(71) [92:0]X_COLUMN(71) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+      <[47:0]!=!(72) [92:0]YVALS(72)
+        <[39:0]fcall(72) [92:0]REFORM(72)
+          <[18:0]arrayexpr(72)
+            <[89:0]VAR(72) [92:0]SOURCE_ARRAY(72) >
+            <[12:0]arrayix(72)
+              <[89:0]VAR(72) [92:0]Y_COLUMN(72) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+      <[47:0]!=!(73) [92:0]FREQUENCY(73)
+        <[39:0]fcall(73) [92:0]REFORM(73)
+          <[18:0]arrayexpr(73)
+            <[89:0]VAR(73) [92:0]SOURCE_ARRAY(73) >
+            <[12:0]arrayix(73)
+              <[89:0]VAR(73) [92:0]FREQUENCY_COLUMN(73) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+      <[47:0]!=!(74) [92:0]RA(74)
+        <[39:0]fcall(74) [92:0]REFORM(74)
+          <[18:0]arrayexpr(74)
+            <[89:0]VAR(74) [92:0]SOURCE_ARRAY(74) >
+            <[12:0]arrayix(74)
+              <[89:0]VAR(74) [92:0]RA_COLUMN(74) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+      <[47:0]!=!(75) [92:0]DEC(75)
+        <[39:0]fcall(75) [92:0]REFORM(75)
+          <[18:0]arrayexpr(75)
+            <[89:0]VAR(75) [92:0]SOURCE_ARRAY(75) >
+            <[12:0]arrayix(75)
+              <[89:0]VAR(75) [92:0]DEC_COLUMN(75) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+      <[47:0]!=!(76) [92:0]ID(76)
+        <[39:0]fcall(76) [92:0]REFORM(76)
+          <[18:0]arrayexpr(76)
+            <[89:0]VAR(76) [92:0]SOURCE_ARRAY(76) >
+            <[12:0]arrayix(76)
+              <[89:0]VAR(76) [92:0]ID_COLUMN(76) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+      <[47:0]!=!(77) [92:0]STON(77)
+        <[39:0]fcall(77) [92:0]REFORM(77)
+          <[18:0]arrayexpr(77)
+            <[89:0]VAR(77) [92:0]SOURCE_ARRAY(77) >
+            <[12:0]arrayix(77)
+              <[89:0]VAR(77) [92:0]STON_COLUMN(77) >
+            >
+            <[12:0]arrayix(0) [4:0]*(0) >
+          >
+        >
+      >
+    >
+  >
+  <[5:0]:=(78)
+    <[205:0].(78)
+      <[89:0]VAR(78) [92:0]SA(78) >[92:0]FLUX(78) [92:0]XX(78)
+    >
+    <[39:0]fcall(78) [92:0]REFORM(78)
+      <[18:0]arrayexpr(78)
+        <[89:0]VAR(78) [92:0]SOURCE_ARRAY(78) >
+        <[12:0]arrayix(78)
+          <[89:0]VAR(78) [92:0]FLUX_XX_COLUMN(78) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(79)
+    <[205:0].(79)
+      <[89:0]VAR(79) [92:0]SA(79) >[92:0]FLUX(79) [92:0]YY(79)
+    >
+    <[39:0]fcall(79) [92:0]REFORM(79)
+      <[18:0]arrayexpr(79)
+        <[89:0]VAR(79) [92:0]SOURCE_ARRAY(79) >
+        <[12:0]arrayix(79)
+          <[89:0]VAR(79) [92:0]FLUX_YY_COLUMN(79) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(80)
+    <[205:0].(80)
+      <[89:0]VAR(80) [92:0]SA(80) >[92:0]FLUX(80) [92:0]XY(80)
+    >
+    <[39:0]fcall(80) [92:0]REFORM(80)
+      <[18:0]arrayexpr(80)
+        <[89:0]VAR(80) [92:0]SOURCE_ARRAY(80) >
+        <[12:0]arrayix(80)
+          <[89:0]VAR(80) [92:0]FLUX_XY_COLUMN(80) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(81)
+    <[205:0].(81)
+      <[89:0]VAR(81) [92:0]SA(81) >[92:0]FLUX(81) [92:0]YX(81)
+    >
+    <[39:0]fcall(81) [92:0]REFORM(81)
+      <[18:0]arrayexpr(81)
+        <[89:0]VAR(81) [92:0]SOURCE_ARRAY(81) >
+        <[12:0]arrayix(81)
+          <[89:0]VAR(81) [92:0]FLUX_YX_COLUMN(81) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(82)
+    <[205:0].(82)
+      <[89:0]VAR(82) [92:0]SA(82) >[92:0]FLUX(82) [92:0]I(82)
+    >
+    <[39:0]fcall(82) [92:0]REFORM(82)
+      <[18:0]arrayexpr(82)
+        <[89:0]VAR(82) [92:0]SOURCE_ARRAY(82) >
+        <[12:0]arrayix(82)
+          <[89:0]VAR(82) [92:0]FLUX_I_COLUMN(82) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(83)
+    <[205:0].(83)
+      <[89:0]VAR(83) [92:0]SA(83) >[92:0]FLUX(83) [92:0]Q(83)
+    >
+    <[39:0]fcall(83) [92:0]REFORM(83)
+      <[18:0]arrayexpr(83)
+        <[89:0]VAR(83) [92:0]SOURCE_ARRAY(83) >
+        <[12:0]arrayix(83)
+          <[89:0]VAR(83) [92:0]FLUX_Q_COLUMN(83) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(84)
+    <[205:0].(84)
+      <[89:0]VAR(84) [92:0]SA(84) >[92:0]FLUX(84) [92:0]U(84)
+    >
+    <[39:0]fcall(84) [92:0]REFORM(84)
+      <[18:0]arrayexpr(84)
+        <[89:0]VAR(84) [92:0]SOURCE_ARRAY(84) >
+        <[12:0]arrayix(84)
+          <[89:0]VAR(84) [92:0]FLUX_U_COLUMN(84) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[5:0]:=(85)
+    <[205:0].(85)
+      <[89:0]VAR(85) [92:0]SA(85) >[92:0]FLUX(85) [92:0]V(85)
+    >
+    <[39:0]fcall(85) [92:0]REFORM(85)
+      <[18:0]arrayexpr(85)
+        <[89:0]VAR(85) [92:0]SOURCE_ARRAY(85) >
+        <[12:0]arrayix(85)
+          <[89:0]VAR(85) [92:0]FLUX_V_COLUMN(85) >
+        >
+        <[12:0]arrayix(0) [4:0]*(0) >
+      >
+    >
+  >
+  <[83:0]RETURN(86)
+    <[89:0]VAR(86) [92:0]SA(86) >
+  >
+>
+<[111:0]FUNCTION(89) [92:0]HEADER_COLUMN(89)
+  <[66:0]paradecl(89) [92:0]HEADER(89)
+    <[46:0]keydecl(89) [92:0]COLUMN_USE(89) [92:0]COLUMN_USE(89) >
+    <[46:0]keydecl(89) [92:0]COLNAME(89) [92:0]COLNAME(89) >
+  >
+  <[5:0]:=(91)
+    <[89:0]VAR(91) [92:0]HEADER_ENTRY(91) >
+    <[39:0]fcall(91) [92:0]WHERE(91)
+      <[109:0]EQ(91)
+        <[89:0]VAR(91) [92:0]HEADER(91) >
+        <[89:0]VAR(91) [92:0]COLNAME(91) >
+      >
+      <[89:0]VAR(91) [92:0]N_MATCH(91) >
+    >
+  >
+  <[115:0]IF(92)
+    <[109:0]EQ(92)
+      <[39:0]fcall(92) [92:0]N_ELEMENTS(92)
+        <[89:0]VAR(92) [92:0]COLUMN_USE(92) >
+      >[27:0x55c72ddee900]0(92)
+    >
+    <[21:0]block(93)
+      <[115:0]IF(93)
+        <[120:0]NE(93)
+          <[89:0]VAR(93) [92:0]N_MATCH(93) >[27:0x55c72ddee9e0]1(93)
+        >
+        <[64:0]pcall(94) [92:0]MESSAGE(94)
+          <[39:0]fcall(94) [92:0]STRING(94)
+            <[47:0]!=!(94) [92:0]FORMAT(94) [27:0x7fa260399168]("Source list header has missing or duplicate entries for ",A)(94) >
+            <[89:0]VAR(94) [92:0]COLNAME(94) >
+          >
+        >
+      >
+      <[5:0]:=(95)
+        <[89:0]VAR(95) [92:0]COLUMN_USE(95) >
+        <[18:0]arrayexpr(95)
+          <[89:0]VAR(95) [92:0]HEADER_ENTRY(95) >
+          <[12:0]arrayix(95) [27:0x55c72ddee820]0(95) >
+        >
+      >
+    >
+  >
+  <[83:0]RETURN(97)
+    <[89:0]VAR(97) [92:0]COLUMN_USE(97) >
+  >
+>
