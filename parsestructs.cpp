@@ -33,6 +33,7 @@ std::string getname(std::string ast, files file)
 
 void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 {
+    writer->beginTransaction();
     std::vector<int> ids;
     for(uint i = 0; i < data.functions.size(); ++i)
     {
@@ -74,6 +75,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
         sourcetrail::SourceRange range = { fileId, data.functions.at(i).loc, 1, data.functions.at(i).loc, 9};
         writer->recordReferenceLocation(ids[i], range);
     }
+    writer->commitTransaction();
 }
 
 void closedb(sourcetrail::SourcetrailDBWriter *writer)
