@@ -48,13 +48,14 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
         int fid = writer->recordSymbol({ "::", { { "function", fnname, paramstring } } });
 
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
-        writer->recordSymbolKind(fid, sourcetrail::SymbolKind::METHOD);
+        writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
         ids.push_back(fid);
     }
-    //indirectly referenced functions
+    //indirectly referenced data
     for(uint i = 0; i < data.functions.size(); ++i)
     {
         int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
+        //referenced functions
         for(uint j = 0; j < data.functions.at(i).fn_references.size(); ++j)
         {
             std::string refname = data.functions.at(i).fn_references.at(j);
@@ -67,10 +68,20 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             else
             {
                 int id = writer->recordSymbol({ "::", { { "function", refname, ""} } });
-                writer->recordSymbolKind(id, sourcetrail::SymbolKind::METHOD);
+                writer->recordSymbolKind(id, sourcetrail::SymbolKind::FUNCTION);
                 int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
                 writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_refs_loc.at(j), 1, data.functions.at(i).fn_refs_loc.at(j), 10});
             }
+        }
+        //referenced system vars
+        for(uint j = 0; j < data.functions.at(i).var_references.size(); ++j)
+        {
+            std::string refname = data.functions.at(i).var_references.at(j);
+
+            int id = writer->recordSymbol({ "::", { { "system variable", refname, ""} } });
+            writer->recordSymbolKind(id, sourcetrail::SymbolKind::GLOBAL_VARIABLE);
+            int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+            writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).var_refs_loc.at(j), 1, data.functions.at(i).var_refs_loc.at(j), 2});
         }
         sourcetrail::SourceRange range = { fileId, data.functions.at(i).loc, 1, data.functions.at(i).loc, 9};
         writer->recordReferenceLocation(ids[i], range);

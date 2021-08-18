@@ -4,20 +4,31 @@ class abstract_function
     public:
         std::vector<std::string> fn_references;
         std::vector<int> fn_refs_loc;
+        std::vector<std::string> var_references;
+        std::vector<int> var_refs_loc;
         std::vector<std::string> params;
         int loc;
         int size;
         std::string file;
         std::string name;
 
-        abstract_function(int location, std::string filename, std::string funcname, std::vector<std::string> args, std::vector<std::string> references, std::vector<int> refs_loc)
+        abstract_function(int location,
+                          std::string filename,
+                          std::string funcname,
+                          std::vector<std::string> args,
+                          std::vector<std::string> freferences,
+                          std::vector<int> frefs_loc,
+                          std::vector<std::string> vreferences,
+                          std::vector<int> vrefs_loc)
         {
             loc = location;
             file = filename;
             name = funcname;
             params = args;
-            fn_references = references;
-            fn_refs_loc = refs_loc;
+            fn_references = freferences;
+            fn_refs_loc = frefs_loc;
+            var_references = vreferences;
+            var_refs_loc = vrefs_loc;
         }
 
         bool operator==(std::string cmp)
@@ -54,6 +65,9 @@ class codedata
         std::vector<abstract_function> functions;
         std::vector<abstract_keyword> keywords;
 };
+
+//returns a vector of strings from a file
+extern std::vector<std::string> loadfile(std::string name);
 
 //returns a codedata() object representing the structure of the codebase
 extern codedata parseast(std::string name, codedata output);

@@ -38,6 +38,17 @@ std::string getfunctionname(std::string line)
     return line;
 }
 
+std::string getvarrefname(std::string line)
+{
+    line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin() + line.find("("),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find("]"));
+    line.erase(line.begin(),line.begin() + 1 + line.find("!"));
+    line.erase(line.begin() + line.find(" "),line.begin() + 1 + line.find(">"));
+
+    return line;
+}
+
 std::string getparamname(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
@@ -69,6 +80,13 @@ int getfunctionline(std::string line)
     return std::stoi(line);
 }
 
+int getvarrefline(std::string line)
+{
+    line.erase(line.begin(), line.begin() + 1 + line.find("("));
+    line.erase(line.begin() + line.find(")"),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin() + line.find(" "),line.begin() + 1 + line.find(">"));
+    return std::stoi(line);
+}
 codedata parseast(std::string name, codedata output)
 {
     std::vector<std::string> file = loadfile(name);
@@ -78,10 +96,10 @@ codedata parseast(std::string name, codedata output)
     {
         std::cout << file.at(i) << "\n";
     }
-    //get the function and its parameters
     for(uint i = 0; i < file.size(); ++i)
     {
-        if(file.at(i).find("FUNCTION") != std::string::npos)
+        //get the function and its parameters
+        if(file.at(i).find("]FUNCTION(") != std::string::npos || file.at(i).find("]PRO(") != std::string::npos)
         {
             //param listings start 2 lines below FUNCTION line
             uint start = i + 2,
@@ -120,7 +138,9 @@ codedata parseast(std::string name, codedata output)
             std::cout << "size " << bodystart << " " << bodyend << "\n";
 
             std::vector<std::string> references;
+            std::vector<std::string> varreferences;
             std::vector<int> refs_loc;
+            std::vector<int> varrefs_loc;
             for(uint j = 0; j < fxnbody.size(); ++j)
             {
                 if((fxnbody.at(j).find("]fcall") != std::string::npos) || (fxnbody.at(j).find("]pcall") != std::string::npos))
@@ -130,9 +150,23 @@ codedata parseast(std::string name, codedata output)
                     references.emplace_back(getfunctioncall(fxnbody.at(j)));
                     refs_loc.emplace_back(getfunctioncallline(fxnbody.at(j)));
                 }
+                if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)
+                {
+                    std::cout << getvarrefname(fxnbody.at(j)) << "\n";
+                    varreferences.emplace_back(getvarrefname(fxnbody.at(j)));
+                    std::cout << getvarrefline(fxnbody.at(j)) << "\n";
+                    varrefs_loc.emplace_back(getvarrefline(fxnbody.at(j)));
+                }
             }
             //commit to object
-            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)), name, getfunctionname(file.at(i)), args, references, refs_loc));
+            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)),
+                                          name,
+                                          getfunctionname(file.at(i)),
+                                          args,
+                                          references,
+                                          refs_loc,
+                                          varreferences,
+                                          varrefs_loc));
         }
     }
     return output;
