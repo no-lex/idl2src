@@ -32,9 +32,13 @@ int main(int argc, char **argv)
     files sfiles = loadfiles();
     sourcetrail::SourcetrailDBWriter *writer = createdb();
     codedata output;
-    for(uint i = 0; i < sfiles.asts.size(); ++i)
+    for(std::string i : sfiles.asts)
     {
-        output = parseast(sfiles.asts.at(i), output);
+        output = parseast(i, output);
+    }
+    for(std::string i : sfiles.asts)
+    {
+        std::cout << i << "\n";
     }
     parse(output, writer, sfiles);
     closedb(writer);
