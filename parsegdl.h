@@ -37,10 +37,20 @@ class abstract_function
         }
 };
 
-struct files
+//a representation of a common block
+class abstract_common
 {
-    std::vector<std::string> asts;
-    std::vector<std::string> codes;
+    public:
+        int loc;
+        std::string file;
+        std::string name;
+
+        abstract_common(int location, std::string filename, std::string comname)
+        {
+            loc = location;
+            file = filename;
+            name = comname;
+        }
 };
 
 //a representation of a keyword
@@ -64,8 +74,14 @@ class codedata
     public:
         std::vector<abstract_function> functions;
         std::vector<abstract_keyword> keywords;
+        std::vector<abstract_common> commons;
 };
 
+struct files
+{
+    std::vector<std::string> asts;
+    std::vector<std::string> codes;
+};
 //returns a vector of strings from a file
 extern std::vector<std::string> loadfile(std::string name);
 

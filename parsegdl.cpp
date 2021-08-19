@@ -106,7 +106,7 @@ std::string getparamname(std::string line)
  * Parameters:
  *  - std::string line: line from a gdl debug file containing called file
  * Returns:
- *  - std::string line with all chars except function name
+ *  - std::string line with all chars except function name culled
  */
 std::string getfunctioncall(std::string line)
 {
@@ -117,6 +117,25 @@ std::string getfunctioncall(std::string line)
 
 }
 
+/* getcommonname: returns name of common block defined in file
+ *
+ * <[26:0]commondef(4) [92:0]FUNC_DATA(4) [92:0]N_PTS(4) [92:0]X_IN(4) [92:0]Y_IN(4) [92:0]X_OUT(4) [92:0]Y_OUT(4) >
+ *  [92:0]FUNC_DATA(4) [92:0]N_PTS(4) [92:0]X_IN(4) [92:0]Y_IN(4) [92:0]X_OUT(4) [92:0]Y_OUT(4) >
+ * FUNC_DATA(4) [92:0]N_PTS(4) [92:0]X_IN(4) [92:0]Y_IN(4) [92:0]X_OUT(4) [92:0]Y_OUT(4) >
+ * FUNC_DATA
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing defined common block
+ * Returns:
+ *  - std::string line with all chars except common block name removed
+ */
+std::string getcommonname(std::string line)
+{
+    line.erase(line.begin(), line.begin() + 1 + line.find(")"));
+    line.erase(line.begin(), line.begin() + 1 + line.find("]"));
+    line.erase(line.begin() + line.find("("), line.end());
+    return line;
+}
 // line retrieval functions
 
 /* getfunctioncallline: returns line number of function name called by file
@@ -160,6 +179,24 @@ int getvarrefline(std::string line)
     line.erase(line.begin(), line.begin() + 1 + line.find("("));
     line.erase(line.begin() + line.find(")"),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find(" "),line.begin() + 1 + line.find(">"));
+    return std::stoi(line);
+}
+
+/* getcommonline: returns line number of common block defined by file
+ *
+ * <[26:0]commondef(4) [92:0]FUNC_DATA(4) [92:0]N_PTS(4) [92:0]X_IN(4) [92:0]Y_IN(4) [92:0]X_OUT(4) [92:0]Y_OUT(4) >
+ * 4) [92:0]FUNC_DATA(4) [92:0]N_PTS(4) [92:0]X_IN(4) [92:0]Y_IN(4) [92:0]X_OUT(4) [92:0]Y_OUT(4) >
+ * 4
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing common block
+ * Returns:
+ *  - int of line where common is from
+ */
+int getcommonline(std::string line)
+{
+    line.erase(line.begin(), line.begin() + 1 + line.find("("));
+    line.erase(line.begin() + line.find(")"),line.end());
     return std::stoi(line);
 }
 
@@ -257,6 +294,12 @@ codedata parseast(std::string name, codedata output)
                                           refs_loc,
                                           varreferences,
                                           varrefs_loc));
+        }
+        if(file.at(i).find("]commondef(") != std::string::npos)
+        {
+            std::cout << getcommonname(file.at(i)) << "\n";
+            std::cout << getcommonline(file.at(i)) << "\n";
+            output.commons.emplace_back(abstract_common(getcommonline(file.at(i)), name, getcommonname(file.at(i))));
         }
     }
     return output;

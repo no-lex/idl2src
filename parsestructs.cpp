@@ -35,9 +35,9 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 {
     writer->beginTransaction();
     std::vector<int> ids;
+    //define directly referenced functions first to ensure linking works
     for(uint i = 0; i < data.functions.size(); ++i)
     {
-        int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
         std::string paramstring = ": ";
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
         {
@@ -51,7 +51,19 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
         ids.push_back(fid);
     }
-    //indirectly referenced data
+    //directly referenced common blocks
+    for(abstract_common i : data.commons)
+    {
+        int fileId = writer->recordFile(getname(i.file, file));
+        std::string comname = i.name;
+        std::string file = i.file;
+        int loc = i.loc;
+        int id = writer->recordSymbol({ "::", { { "common block", comname, "" } } });
+        writer->recordSymbolKind(id, sourcetrail::SymbolKind::STRUCT);
+        writer->recordSymbolDefinitionKind(id, sourcetrail::DefinitionKind::EXPLICIT);
+        writer->recordSymbolLocation(id, {fileId, loc, 1, loc, 2});
+    }
+    //function linking
     for(uint i = 0; i < data.functions.size(); ++i)
     {
         int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
