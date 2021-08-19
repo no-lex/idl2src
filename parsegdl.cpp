@@ -1,4 +1,7 @@
-/* parsing of the gdl abstract output files
+/* parsegdl.cpp: parsing of the gdl abstract output files
+ *
+ * This file parses a GDL debug file and stores its information as a `codedata`
+ * object which is used by `parsestructs` in order to create a sourcetrail database.
  */
 #include "SourcetrailDBWriter.h"
 #include "NameHierarchy.h"
@@ -10,6 +13,17 @@
 
 #include "parsegdl.h"
 
+/* loadfile: loads a file to a std::vector
+ *
+ * This function returns a std::vector of std::strings, with each string
+ * corresponding to a single line from the file read in. As a result, the
+ * resulting std::vector is of length {number of lines in file}.
+ *
+ * Parameters:
+ *  - std::string name: path to the file to load
+ * Returns:
+ *  - std::vector<std::string> of file
+ */
 std::vector<std::string> loadfile(std::string name)
 {
     std::vector<std::string> output;
@@ -30,6 +44,20 @@ std::vector<std::string> loadfile(std::string name)
     return output;
 }
 
+/*==============================================================================
+
+                            Text Processing Functions
+
+==============================================================================*/
+
+/* getfunctionname: returns name of function from FUNCTION call
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing function name
+ *
+ * Returns:
+ *  - std::string of line with all chars except function name culled
+ */
 std::string getfunctionname(std::string line)
 {
     line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find(")"));
@@ -38,6 +66,14 @@ std::string getfunctionname(std::string line)
     return line;
 }
 
+/* getfunctionname: returns name of variable from variable reference
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing variable name
+ *
+ * Returns:
+ *  - std::string line with all chars except variable name culled
+ */
 std::string getvarrefname(std::string line)
 {
     line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find(")"));
@@ -49,6 +85,14 @@ std::string getvarrefname(std::string line)
     return line;
 }
 
+/* getparamname: returns name of function parameter from function call
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing parameter (keyword)
+ *
+ * Returns:
+ *  - std::string line with all chars except parameter name culled
+ */
 std::string getparamname(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
@@ -57,6 +101,13 @@ std::string getparamname(std::string line)
     return line;
 }
 
+/* getparamname: returns name of function name called (not defined) by file
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing called file
+ * Returns:
+ *  - std::string line with all chars except function name
+ */
 std::string getfunctioncall(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
@@ -65,6 +116,16 @@ std::string getfunctioncall(std::string line)
     return line;
 
 }
+
+// line retrieval functions
+
+/* getfunctioncallline: returns line number of function name called by file
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file with called function
+ * Returns:
+ *  - int of line where var is from
+ */
 int getfunctioncallline(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
@@ -73,6 +134,13 @@ int getfunctioncallline(std::string line)
     return std::stoi(line);
 }
 
+/* getfunctionline: returns line number of function name defined by file
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file with function definition
+ * Returns:
+ *  - int of line where var is from
+ */
 int getfunctionline(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find("("));
@@ -80,6 +148,13 @@ int getfunctionline(std::string line)
     return std::stoi(line);
 }
 
+/* getvarrefline: returns line number of system variable defined by file
+ *
+ * Parameters:
+ *  - std::string line: line from a gdl debug file containing called var
+ * Returns:
+ *  - int of line where var is from
+ */
 int getvarrefline(std::string line)
 {
     line.erase(line.begin(), line.begin() + 1 + line.find("("));
@@ -87,6 +162,21 @@ int getvarrefline(std::string line)
     line.erase(line.begin() + line.find(" "),line.begin() + 1 + line.find(">"));
     return std::stoi(line);
 }
+
+/*==============================================================================
+
+                                Code Parsing
+
+ =============================================================================*/
+
+/* parseast: adds to a codedata object information from given file
+ *
+ * Parameters:
+ *  - std::string name: path of file to open and read
+ *  - codedata output: codedata object to add symbols to
+ * Returns:
+ *  - codedata object containing symbols in file
+ */
 codedata parseast(std::string name, codedata output)
 {
     std::vector<std::string> file = loadfile(name);
