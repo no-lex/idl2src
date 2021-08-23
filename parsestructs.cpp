@@ -16,6 +16,20 @@
 
 const char * filename = "testfile.srctrldb";
 
+//from sourcetraildb examples
+sourcetrail::NameHierarchy to_name_hierarchy(const std::vector<std::string>& strs)
+{
+    sourcetrail::NameHierarchy name = { "::", { } };
+    for (auto str : strs)
+    {
+        if (str.size())
+        {
+            name.nameElements.emplace_back( sourcetrail::NameElement({ "", str, "" }) );
+        }
+    }
+    return name;
+}
+
 sourcetrail::SourcetrailDBWriter *createdb()
 {
     sourcetrail::SourcetrailDBWriter *writer = new sourcetrail::SourcetrailDBWriter{};
@@ -38,18 +52,27 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
     //define directly referenced functions first to ensure linking works
     for(uint i = 0; i < data.functions.size(); ++i)
     {
+        std::string fnname = data.functions.at(i).name;
+
+        //construct list of parameters (keywords)
         std::string paramstring = ": ";
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
         {
             paramstring.append(data.functions.at(i).params.at(j)).append(", ");
         }
-        std::string fnname = data.functions.at(i).name;
 
         int fid = writer->recordSymbol({ "::", { { "function", fnname, paramstring } } });
 
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
         ids.push_back(fid);
+
+        for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
+        {
+            int pid = writer->recordSymbol(to_name_hierarchy({fnname, data.functions.at(i).params.at(j) })s );
+            writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
+            writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
+        }
     }
     //directly referenced common blocks
     for(abstract_common i : data.commons)
