@@ -69,7 +69,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
         {
-            int pid = writer->recordSymbol(to_name_hierarchy({fnname, data.functions.at(i).params.at(j) })s );
+            int pid = writer->recordSymbol(to_name_hierarchy({fnname, data.functions.at(i).params.at(j) }) );
             writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
             writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
         }
