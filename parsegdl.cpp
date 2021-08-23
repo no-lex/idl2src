@@ -52,6 +52,16 @@ std::vector<std::string> loadfile(std::string name)
 
 /* getfunctionname: returns name of function from FUNCTION call
  *
+ *  <[39:0]fcall(22) [92:0]N_ELEMENTS(22)
+ *   [92:0]N_ELEMENTS(22)
+ *  < [92:0]N_ELEMENTS
+ *  N_ELEMENTS
+ *
+ * <[64:0]pcall(21) [92:0]PRINT(21) [27:0x7f210c631670]WARNING: obs structure not present in source_dft_multi, but flatten_spectrum was set(21) >
+ *  [92:0]PRINT(21) [27:0x7f210c631670]WARNING: obs structure not present in source_dft_multi, but flatten_spectrum was set(21) >
+ *  [92:0]PRINT
+ *  PRINT
+ *
  * Parameters:
  *  - std::string line: line from a gdl debug file containing function name
  *
@@ -60,13 +70,13 @@ std::vector<std::string> loadfile(std::string name)
  */
 std::string getfunctionname(std::string line)
 {
-    line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find(")"));
-    line.erase(line.begin() + line.find("("),line.begin() + 1 + line.find(")"));
-    line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find("]"));
+    line.erase(line.begin(),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin() + line.find("("),line.end());
+    line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find("]"));
     return line;
 }
 
-/* getfunctionname: returns name of variable from variable reference
+/* getvarrefname: returns name of variable from variable reference
  *
  * Parameters:
  *  - std::string line: line from a gdl debug file containing variable name
@@ -110,9 +120,9 @@ std::string getparamname(std::string line)
  */
 std::string getfunctioncall(std::string line)
 {
-    line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
-    line.erase(line.begin() + line.find(" "),line.begin() + 1 + line.find("]"));
-    line.erase(line.begin() + line.find("("),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin(),line.begin() + 1 + line.find(")"));
+    line.erase(line.begin() + line.find("("),line.end());
+    line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find("]"));
     return line;
 
 }
