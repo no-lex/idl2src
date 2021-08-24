@@ -17,16 +17,16 @@
 const char * filename = "testfile.srctrldb";
 
 //from sourcetraildb examples
-sourcetrail::NameHierarchy to_name_hierarchy(const std::vector<std::string>& strs)
+sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *writer, const std::string parent, const std::string str, const std::string paramstring)
 {
-    sourcetrail::NameHierarchy name = { "::", { } };
-    for (auto str : strs)
-    {
-        if (str.size())
-        {
-            name.nameElements.emplace_back( sourcetrail::NameElement({ "", str, "" }) );
-        }
-    }
+    sourcetrail::NameHierarchy name = { "::", {} };
+    name.nameElements.emplace_back( sourcetrail::NameElement({ "function", parent, paramstring}) );
+    int pid = writer->recordSymbol(name);
+    writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
+    writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FUNCTION);
+
+    name.nameElements.emplace_back( sourcetrail::NameElement({ "keyword", str, }) );
+
     return name;
 }
 
@@ -69,7 +69,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
         {
-            int pid = writer->recordSymbol(to_name_hierarchy({fnname, data.functions.at(i).params.at(j) }) );
+            int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), paramstring) );
             writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
             writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
         }
