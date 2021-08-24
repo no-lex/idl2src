@@ -52,8 +52,9 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
     //define directly referenced functions first to ensure linking works
     for(uint i = 0; i < data.functions.size(); ++i)
     {
+        int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
         std::string fnname = data.functions.at(i).name;
-
+        int loc = data.functions.at(i).loc;
         //construct list of parameters (keywords)
         std::string paramstring = ": ";
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
@@ -65,6 +66,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
+        writer->recordSymbolLocation(fid, {fileId, loc, 1, loc, 2});
         ids.push_back(fid);
 
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
@@ -72,6 +74,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), paramstring) );
             writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
             writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
+            writer->recordSymbolLocation(pid, {fileId, loc, 1, loc, 2});
         }
     }
     //directly referenced common blocks
