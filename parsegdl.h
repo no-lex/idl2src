@@ -1,32 +1,45 @@
+//a representation of the information a function call inside a function has
+class function_call
+{
+    public:
+        std::vector<std::string> fn_called_keywords;                    //the keywords referenced by name
+        std::string fn_reference;                                  //the name of the referenced function
+        int ref_loc;
+
+        function_call(std::string reference, int loc)
+        {
+            fn_reference = reference;
+            ref_loc = loc;
+        }
+};
 //a representation of a function
 class abstract_function
 {
     public:
-        std::vector<std::string> fn_references;
-        std::vector<int> fn_refs_loc;
-        std::vector<std::string> var_references;
-        std::vector<int> var_refs_loc;
-        std::vector<std::string> params;
-        int loc;
-        int size;
-        std::string file;
-        std::string name;
+        std::vector<function_call> fn_references;               //vector containing information for each function this function calls
+        std::vector<std::string> var_references;                //vector of std::string of refernced var calls
+        std::vector<int> var_refs_loc;                          //vector of int of external var use
+        std::vector<std::string> params;                        //vector of std::string of function's parameters (keywords)
+        int loc;                                                //line the function is defined on
+        int size;                                               //number of lines the function body takes
+        std::string file;                                       //std::string representation of code file path
+        std::string name;                                       //std::string representation of function name
 
         abstract_function(int location,
+                          int funcsize,
                           std::string filename,
                           std::string funcname,
                           std::vector<std::string> args,
-                          std::vector<std::string> freferences,
-                          std::vector<int> frefs_loc,
+                          std::vector<function_call> references,
                           std::vector<std::string> vreferences,
                           std::vector<int> vrefs_loc)
         {
             loc = location;
+            size = funcsize;
             file = filename;
             name = funcname;
             params = args;
-            fn_references = freferences;
-            fn_refs_loc = frefs_loc;
+            fn_references = references;
             var_references = vreferences;
             var_refs_loc = vrefs_loc;
         }

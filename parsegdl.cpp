@@ -274,7 +274,7 @@ codedata parseast(std::string name, codedata output)
             std::copy(file.begin() + bodystart, file.begin() + bodyend, fxnbody.begin());
             std::cout << "size " << bodystart << " " << bodyend << "\n";
 
-            std::vector<std::string> references;
+            std::vector<function_call> references;
             std::vector<std::string> varreferences;
             std::vector<int> refs_loc;
             std::vector<int> varrefs_loc;
@@ -284,8 +284,8 @@ codedata parseast(std::string name, codedata output)
                 {
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
-                    references.emplace_back(getfunctioncall(fxnbody.at(j)));
-                    refs_loc.emplace_back(getfunctioncallline(fxnbody.at(j)));
+                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j))) );
+
                 }
                 if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)
                 {
@@ -295,15 +295,16 @@ codedata parseast(std::string name, codedata output)
                     varrefs_loc.emplace_back(getvarrefline(fxnbody.at(j)));
                 }
             }
+
             //commit to object
             output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)),
-                                          name,
-                                          getfunctionname(file.at(i)),
-                                          args,
-                                          references,
-                                          refs_loc,
-                                          varreferences,
-                                          varrefs_loc));
+                                                            fxnbody.size(),
+                                                            name,
+                                                            getfunctionname(file.at(i)),
+                                                            args,
+                                                            references,
+                                                            varreferences,
+                                                            varrefs_loc));
         }
         if(file.at(i).find("]commondef(") != std::string::npos)
         {
