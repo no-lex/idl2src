@@ -23,3 +23,25 @@ compiler. The dependencies for the idl2src binary are as follows:
 
 * c++17
 * make
+* gdl **with debug output enabled**
+
+### Usage
+
+`idl2src` is intended to be used within Sourcetrail using its custom source group
+functionality. To use `idl2src` to index an IDL/GDL codebase, the following things
+must be done:
+
+* build & install `gdl` with the `GDL_DEBUG` macro in `dinterpreter.cpp` uncommented
+* build `idl2src` by running `make` from this directory
+* copy `idl2src` and `run_indexer.sh` to the codebase you want to index
+
+From here, all that is required is to setup the project within Sourcetrail:
+
+* create a Sourcetrail project in the desired directory
+* create a new Sourcetrail source group and select "Custom Command Source Group" in the "custom" tab
+* enter `bash ./run_indexer.sh %{SOURCE_FILE_PATH} %{DATABASE_FILE_PATH}` into the Custom Command entry box
+* enter `./` (or whatever files you want to index) in the "Files & Directories to Index" entry box
+* enter ".pro" into the "Source File Extensions" entry box
+
+After this is complete, you should be able to index your Sourcetrail project
+after exiting the setup menu.
