@@ -13,8 +13,8 @@ files loadfiles()
 {
     files startupfiles;
 
-    std::vector<std::string> ast = loadfile("files2.txt");
-    std::vector<std::string> code = loadfile("files.txt");
+    std::vector<std::string> ast = loadfile("files.txt");
+    std::vector<std::string> code = loadfile("files2.txt");
 
     for(std::string i : ast)
     {
@@ -29,8 +29,51 @@ files loadfiles()
 
 int main(int argc, char **argv)
 {
-    files sfiles = loadfiles();
-    sourcetrail::SourcetrailDBWriter *writer = createdb();
+    //handle input arguments
+    const char * name = "default.srctrldb";
+
+    std::string path1;
+    std::string path2;
+    for(int i = 1; i < argc; i++)
+    {
+        if(argv[i][0]=='-')
+        {
+            switch(argv[i][1])
+            {
+                case 'v':
+                {
+                    std::cout << "idl2src alpha built " << __DATE__ << "\n";
+                    exit(0);
+                }
+                case 'h':
+                {
+                    std::cout << "usage: idl2src [OPTIONS]\n\n";
+                    std::cout << "  -h    print this usage and exit\n";
+                    std::cout << "  -v    print out version information and exit\n";
+                    std::cout << "  -f    name of file to index\n";
+                    std::cout << "  -n    name of database to output";
+                    exit(0);
+                }
+                case 'f':
+                {
+                    std::cout << argv[i + 1] << "\n";
+                    path1 = path2 = argv[i+1];
+                    path1.append(".pro");
+                    path2.append(".txt");
+                    std::cout << path1 << "\n";
+                    std::cout << path2 << "\n";
+                }
+                case 'n':
+                {
+                    name = argv[i + 1];
+                }
+            }
+        }
+    }
+
+    files sfiles = { {path2}, {path1} };
+
+    sourcetrail::SourcetrailDBWriter *writer = createdb(name);
     codedata output;
     for(std::string i : sfiles.asts)
     {

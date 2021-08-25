@@ -14,13 +14,12 @@
 #include "parsegdl.h"
 #include "parsestructs.h"
 
-const char * filename = "testfile.srctrldb";
 
 //from sourcetraildb examples
 sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *writer, const std::string parent, const std::string str, const std::string paramstring)
 {
     sourcetrail::NameHierarchy name = { "::", {} };
-    name.nameElements.emplace_back( sourcetrail::NameElement({ "function", parent, paramstring}) );
+    name.nameElements.emplace_back( sourcetrail::NameElement({ "function", parent, ""}) );
     int pid = writer->recordSymbol(name);
     writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
     writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FUNCTION);
@@ -30,10 +29,10 @@ sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *w
     return name;
 }
 
-sourcetrail::SourcetrailDBWriter *createdb()
+sourcetrail::SourcetrailDBWriter *createdb(const char * name)
 {
     sourcetrail::SourcetrailDBWriter *writer = new sourcetrail::SourcetrailDBWriter{};
-    writer->open(filename);
+    writer->open(name);
     return writer;
 }
 
@@ -62,7 +61,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             paramstring.append(data.functions.at(i).params.at(j)).append(", ");
         }
 
-        int fid = writer->recordSymbol({ "::", { { "function", fnname, paramstring } } });
+        int fid = writer->recordSymbol({ "::", { { "function", fnname, "" } } });
 
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);

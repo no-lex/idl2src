@@ -1,8 +1,8 @@
-//a representation of the information a function call inside a function has
+//a representation of the information a function call inside another function has
 class function_call
 {
     public:
-        std::vector<std::string> fn_called_keywords;                    //the keywords referenced by name
+        std::vector<std::string> fn_called_keywords;               //the keywords referenced by name
         std::string fn_reference;                                  //the name of the referenced function
         int ref_loc;
 
@@ -12,6 +12,7 @@ class function_call
             ref_loc = loc;
         }
 };
+
 //a representation of a function
 class abstract_function
 {
