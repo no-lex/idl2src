@@ -73,6 +73,10 @@ std::string getfunctionname(std::string line)
     line.erase(line.begin(),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find("("),line.end());
     line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find("]"));
+    if(line.begin() == line.begin() + line.find(" "))
+    {
+        line.erase(line.begin(), line.begin() + 1);
+    }
     return line;
 }
 
@@ -123,6 +127,10 @@ std::string getfunctioncall(std::string line)
     line.erase(line.begin(),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find("("),line.end());
     line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find("]"));
+    if(line.begin() == line.begin() + line.find(" "))
+    {
+        line.erase(line.begin(), line.begin() + 1);
+    }
     return line;
 
 }
