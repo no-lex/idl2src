@@ -1,4 +1,4 @@
-CXXFLAGS= -O0 -fomit-frame-pointer -ffast-math -std=c++17 -Wall -fsigned-char -fno-exceptions -ggdb3
+CXXFLAGS= --pedantic  -O3 -fno-rtti -fomit-frame-pointer -ffast-math -std=c++17 -Wextra -fsigned-char -fno-exceptions -ggdb3
 
 INCLUDES=-Iinclude -Ilib -pthread
 

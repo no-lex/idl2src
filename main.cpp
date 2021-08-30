@@ -62,10 +62,12 @@ int main(int argc, char **argv)
                     path2.append(".txt");
                     std::cout << path1 << "\n";
                     std::cout << path2 << "\n";
+                    break;
                 }
                 case 'n':
                 {
                     name = argv[i + 1];
+                    break;
                 }
             }
         }
