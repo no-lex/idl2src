@@ -14,12 +14,25 @@
 #include "parsegdl.h"
 #include "parsestructs.h"
 
+//returns either "function" for false or "procedure" for true
+//used to turn is_procedure into a string for recordSymbol()
+std::string pro_to_str(bool ispro)
+{
+    if(ispro)
+    {
+        return "procedure";
+    }
+    else
+    {
+        return "function";
+    }
+}
 
 //from sourcetraildb examples
-sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *writer, const std::string parent, const std::string str, const std::string paramstring)
+sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *writer, const std::string parent, const std::string str, const std::string paramstring, bool ispro)
 {
     sourcetrail::NameHierarchy name = { "::", {} };
-    name.nameElements.emplace_back( sourcetrail::NameElement({ "function", parent, ""}) );
+    name.nameElements.emplace_back( sourcetrail::NameElement({ pro_to_str(ispro), parent, ""}) );
     int pid = writer->recordSymbol(name);
     writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
     writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FUNCTION);
@@ -43,7 +56,6 @@ std::string getname(std::string ast, files file)
     return file.codes.at(loc);
 }
 
-
 void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 {
     writer->beginTransaction();
@@ -61,7 +73,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             paramstring.append(data.functions.at(i).params.at(j)).append(", ");
         }
 
-        int fid = writer->recordSymbol({ "::", { { "function", fnname, "" } } });
+        int fid = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).is_procedure), fnname, "" } } });
 
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
@@ -70,7 +82,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
         {
-            int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), paramstring) );
+            int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), paramstring, data.functions.at(i).is_procedure) );
             writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
             writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
             writer->recordSymbolLocation(pid, {fileId, loc, 1, loc, 2});
@@ -104,7 +116,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             }
             else
             {
-                int id = writer->recordSymbol({ "::", { { "function", refname, ""} } });
+                int id = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).fn_references.at(j).is_procedure), refname, ""} } });
                 writer->recordSymbolKind(id, sourcetrail::SymbolKind::FUNCTION);
                 int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
                 writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_references.at(j).ref_loc, 1, data.functions.at(i).fn_references.at(j).ref_loc, 10});

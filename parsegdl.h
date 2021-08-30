@@ -5,11 +5,12 @@ class function_call
         std::vector<std::string> fn_called_keywords;               //the keywords referenced by name
         std::string fn_reference;                                  //the name of the referenced function
         int ref_loc;
-
-        function_call(std::string reference, int loc)
+        bool is_procedure;                                         //whether the function is a function (0) or procedure (1)
+        function_call(std::string reference, int loc, bool pro)
         {
             fn_reference = reference;
             ref_loc = loc;
+            is_procedure = pro;
         }
 };
 
@@ -25,6 +26,7 @@ class abstract_function
         int size;                                               //number of lines the function body takes
         std::string file;                                       //std::string representation of code file path
         std::string name;                                       //std::string representation of function name
+        bool is_procedure;                                      //whether the function is a function (0) or procedure (1)
 
         abstract_function(int location,
                           int funcsize,
@@ -33,7 +35,8 @@ class abstract_function
                           std::vector<std::string> args,
                           std::vector<function_call> references,
                           std::vector<std::string> vreferences,
-                          std::vector<int> vrefs_loc)
+                          std::vector<int> vrefs_loc,
+                          bool pro)
         {
             loc = location;
             size = funcsize;
@@ -43,6 +46,7 @@ class abstract_function
             fn_references = references;
             var_references = vreferences;
             var_refs_loc = vrefs_loc;
+            is_procedure = pro;
         }
 
         bool operator==(std::string cmp)

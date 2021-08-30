@@ -238,6 +238,17 @@ codedata parseast(std::string name, codedata output)
         //get the function and its parameters
         if(file.at(i).find("]FUNCTION(") != std::string::npos || file.at(i).find("]PRO(") != std::string::npos)
         {
+            //determine if the function is a procedure
+            bool ispro;
+            if(file.at(i).find("]PRO(") != std::string::npos)
+            {
+                ispro = true;
+            }
+            else
+            {
+                ispro = false;
+            }
+
             //param listings start 2 lines below FUNCTION line
             uint start = i + 2,
                  end = i + 3;
@@ -282,9 +293,19 @@ codedata parseast(std::string name, codedata output)
             {
                 if((fxnbody.at(j).find("]fcall") != std::string::npos) || (fxnbody.at(j).find("]pcall") != std::string::npos))
                 {
+                    //determine whether the call is to a procedure or function
+                    bool callpro;
+                    if(fxnbody.at(j).find("]pcall") != std::string::npos)
+                    {
+                        callpro = true;
+                    }
+                    else
+                    {
+                        callpro = false;
+                    }
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
-                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j))) );
+                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), callpro) );
 
                 }
                 if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)
@@ -304,7 +325,8 @@ codedata parseast(std::string name, codedata output)
                                                             args,
                                                             references,
                                                             varreferences,
-                                                            varrefs_loc));
+                                                            varrefs_loc,
+                                                            ispro));
         }
         if(file.at(i).find("]commondef(") != std::string::npos)
         {
