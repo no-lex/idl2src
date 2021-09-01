@@ -65,7 +65,8 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
     {
         int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
         std::string fnname = data.functions.at(i).name;
-        int loc = data.functions.at(i).loc;
+        int loc = data.functions.at(i).loc; //line of function definition
+        int loc_in = data.functions.at(i).loc_in_line; //location in line of function definition
         //construct list of parameters (keywords)
         std::string paramstring = ": ";
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
@@ -77,7 +78,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 
         writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
-        writer->recordSymbolLocation(fid, {fileId, loc, 1, loc, 2});
+        writer->recordSymbolLocation(fid, {fileId, loc, loc_in, loc, loc_in + static_cast<int>(data.functions.at(i).name.size()) - 1});
         ids.push_back(fid);
 
         for(uint j = 0; j < data.functions.at(i).params.size(); ++j)
@@ -85,7 +86,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), data.functions.at(i).is_procedure) );
             writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
             writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
-            writer->recordSymbolLocation(pid, {fileId, loc, 1, loc, 2});
+            writer->recordSymbolLocation(pid, {fileId, loc, loc_in, loc, loc_in + static_cast<int>(data.functions.at(i).name.size()) - 1});
         }
     }
     //directly referenced common blocks
@@ -112,14 +113,24 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             {
                 int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname));
                 int refid = writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
-                writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_references.at(j).ref_loc, 1, data.functions.at(i).fn_references.at(j).ref_loc, 10});
+                writer->recordReferenceLocation(refid, {fileId,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
+                                                       });
             }
             else
             {
                 int id = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).fn_references.at(j).is_procedure), refname, ""} } });
                 writer->recordSymbolKind(id, sourcetrail::SymbolKind::FUNCTION);
                 int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
-                writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_references.at(j).ref_loc, 1, data.functions.at(i).fn_references.at(j).ref_loc, 10});
+                writer->recordReferenceLocation(refid, {fileId,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
+                                                       });
             }
         }
         //referenced system vars
@@ -132,8 +143,6 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
             writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_references.at(j).ref_loc, 1, data.functions.at(i).fn_references.at(j).ref_loc, 2});
         }
-        sourcetrail::SourceRange range = { fileId, data.functions.at(i).loc, 1, data.functions.at(i).loc, 9};
-        writer->recordReferenceLocation(ids[i], range);
     }
     writer->commitTransaction();
 }

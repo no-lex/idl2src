@@ -13,8 +13,8 @@ files loadfiles()
 {
     files startupfiles;
 
-    std::vector<std::string> ast = loadfile("files.txt");
-    std::vector<std::string> code = loadfile("files2.txt");
+    std::vector<std::string> ast = startupfiles.loadfile("files.txt");
+    std::vector<std::string> code = startupfiles.loadfile("files2.txt");
 
     for(std::string i : ast)
     {
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     codedata output;
     for(std::string i : sfiles.asts)
     {
-        output = parseast(i, output);
+        output.parseast(i);
     }
     for(std::string i : sfiles.asts)
     {

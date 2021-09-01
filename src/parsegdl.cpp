@@ -24,7 +24,7 @@
  * Returns:
  *  - std::vector<std::string> of file
  */
-std::vector<std::string> loadfile(std::string name)
+std::vector<std::string> files::loadfile(std::string name)
 {
     std::vector<std::string> output;
     std::string line;
@@ -68,7 +68,7 @@ std::vector<std::string> loadfile(std::string name)
  * Returns:
  *  - std::string of line with all chars except function name culled
  */
-std::string getfunctionname(std::string line)
+std::string codedata::getfunctionname(std::string line)
 {
     line.erase(line.begin(),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find("("),line.end());
@@ -88,7 +88,7 @@ std::string getfunctionname(std::string line)
  * Returns:
  *  - std::string line with all chars except variable name culled
  */
-std::string getvarrefname(std::string line)
+std::string codedata::getvarrefname(std::string line)
 {
     line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find("("),line.begin() + 1 + line.find(")"));
@@ -107,7 +107,7 @@ std::string getvarrefname(std::string line)
  * Returns:
  *  - std::string line with all chars except parameter name culled
  */
-std::string getparamname(std::string line)
+std::string codedata::getparamname(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find(" "),line.begin() + 1 + line.find("]"));
@@ -122,7 +122,7 @@ std::string getparamname(std::string line)
  * Returns:
  *  - std::string line with all chars except function name culled
  */
-std::string getfunctioncall(std::string line)
+std::string codedata::getfunctioncall(std::string line)
 {
     line.erase(line.begin(),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find("("),line.end());
@@ -147,7 +147,7 @@ std::string getfunctioncall(std::string line)
  * Returns:
  *  - std::string line with all chars except common block name removed
  */
-std::string getcommonname(std::string line)
+std::string codedata::getcommonname(std::string line)
 {
     line.erase(line.begin(), line.begin() + 1 + line.find(")"));
     line.erase(line.begin(), line.begin() + 1 + line.find("]"));
@@ -163,7 +163,7 @@ std::string getcommonname(std::string line)
  * Returns:
  *  - int of line where var is from
  */
-int getfunctioncallline(std::string line)
+int codedata::getfunctioncallline(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find(")"));
     line.erase(line.begin() + line.find("["),line.begin() + 1 + line.find("("));
@@ -178,7 +178,7 @@ int getfunctioncallline(std::string line)
  * Returns:
  *  - int of line where var is from
  */
-int getfunctionline(std::string line)
+int codedata::getfunctionline(std::string line)
 {
     line.erase(line.begin() + line.find("<"),line.begin() + 1 + line.find("("));
     line.erase(line.begin() + line.find(")"),line.begin() + 1 + line.find(")"));
@@ -192,7 +192,7 @@ int getfunctionline(std::string line)
  * Returns:
  *  - int of line where var is from
  */
-int getvarrefline(std::string line)
+int codedata::getvarrefline(std::string line)
 {
     line.erase(line.begin(), line.begin() + 1 + line.find("("));
     line.erase(line.begin() + line.find(")"),line.begin() + 1 + line.find(")"));
@@ -211,7 +211,7 @@ int getvarrefline(std::string line)
  * Returns:
  *  - int of line where common is from
  */
-int getcommonline(std::string line)
+int codedata::getcommonline(std::string line)
 {
     line.erase(line.begin(), line.begin() + 1 + line.find("("));
     line.erase(line.begin() + line.find(")"),line.end());
@@ -223,6 +223,20 @@ int getcommonline(std::string line)
                                 Code Parsing
 
  =============================================================================*/
+uint loc_in_line(std::string name, int line, std::string fnname)
+{
+    files file;
+
+    name.erase(name.begin() + name.find(".txt"), name.end());
+    name.append(".pro");
+    std::vector<std::string> fileinfo = file.loadfile(name);
+    std::string codeline = fileinfo.at(line - 1);
+    for(auto & i : codeline)
+    {
+        i = std::toupper(i);
+    }
+    return codeline.find(fnname) + 1; //+1 to resolve fencepost error
+}
 
 /* parseast: adds to a codedata object information from given file
  *
@@ -232,9 +246,10 @@ int getcommonline(std::string line)
  * Returns:
  *  - codedata object containing symbols in file
  */
-codedata parseast(std::string name, codedata output)
+void codedata::parseast(std::string name)
 {
-    std::vector<std::string> file = loadfile(name);
+    files dummy_file;
+    std::vector<std::string> file = dummy_file.loadfile(name);
     std::vector<std::string> args(0);
 
     for(uint i = 0; i < file.size(); ++i)
@@ -313,7 +328,9 @@ codedata parseast(std::string name, codedata output)
                     }
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
-                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), callpro) );
+
+                    int ref_line_loc = loc_in_line(name, getfunctioncallline(fxnbody.at(j)), getfunctioncall(fxnbody.at(j)));
+                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), ref_line_loc, callpro) );
 
                 }
                 if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)
@@ -325,23 +342,27 @@ codedata parseast(std::string name, codedata output)
                 }
             }
 
+            //definition location in line
+
+            int line_loc = loc_in_line(name, getfunctionline(file.at(i)), getfunctionname(file.at(i)));
+
             //commit to object
-            output.functions.emplace_back(abstract_function(getfunctionline(file.at(i)),
-                                                            fxnbody.size(),
-                                                            name,
-                                                            getfunctionname(file.at(i)),
-                                                            args,
-                                                            references,
-                                                            varreferences,
-                                                            varrefs_loc,
-                                                            ispro));
+            functions.emplace_back(abstract_function(getfunctionline(file.at(i)),
+                                                     fxnbody.size(),
+                                                     name,
+                                                     getfunctionname(file.at(i)),
+                                                     args,
+                                                     references,
+                                                     varreferences,
+                                                     varrefs_loc,
+                                                     ispro,
+                                                     line_loc));
         }
         if(file.at(i).find("]commondef(") != std::string::npos)
         {
             std::cout << getcommonname(file.at(i)) << "\n";
             std::cout << getcommonline(file.at(i)) << "\n";
-            output.commons.emplace_back(abstract_common(getcommonline(file.at(i)), name, getcommonname(file.at(i))));
+            commons.emplace_back(abstract_common(getcommonline(file.at(i)), name, getcommonname(file.at(i))));
         }
     }
-    return output;
 }
