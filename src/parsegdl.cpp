@@ -223,6 +223,20 @@ int codedata::getcommonline(std::string line)
                                 Code Parsing
 
  =============================================================================*/
+uint loc_in_line(std::string name, int line, std::string fnname)
+{
+    files file;
+
+    name.erase(name.begin() + name.find(".txt"), name.end());
+    name.append(".pro");
+    std::vector<std::string> fileinfo = file.loadfile(name);
+    std::string codeline = fileinfo.at(line - 1);
+    for(auto & i : codeline)
+    {
+        i = std::toupper(i);
+    }
+    return codeline.find(fnname) + 1; //+1 to resolve fencepost error
+}
 
 /* parseast: adds to a codedata object information from given file
  *
@@ -234,7 +248,8 @@ int codedata::getcommonline(std::string line)
  */
 void codedata::parseast(std::string name)
 {
-    std::vector<std::string> file = loadfile(name);
+    files dummy_file;
+    std::vector<std::string> file = dummy_file.loadfile(name);
     std::vector<std::string> args(0);
 
     for(uint i = 0; i < file.size(); ++i)
@@ -313,7 +328,9 @@ void codedata::parseast(std::string name)
                     }
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
-                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), callpro) );
+
+                    int ref_line_loc = loc_in_line(name, getfunctioncallline(fxnbody.at(j)), getfunctioncall(fxnbody.at(j)));
+                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), ref_line_loc, callpro) );
 
                 }
                 if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)
@@ -325,6 +342,10 @@ void codedata::parseast(std::string name)
                 }
             }
 
+            //definition location in line
+
+            int line_loc = loc_in_line(name, getfunctionline(file.at(i)), getfunctionname(file.at(i)));
+
             //commit to object
             functions.emplace_back(abstract_function(getfunctionline(file.at(i)),
                                                      fxnbody.size(),
@@ -334,7 +355,8 @@ void codedata::parseast(std::string name)
                                                      references,
                                                      varreferences,
                                                      varrefs_loc,
-                                                     ispro));
+                                                     ispro,
+                                                     line_loc));
         }
         if(file.at(i).find("]commondef(") != std::string::npos)
         {
