@@ -13,8 +13,8 @@ files loadfiles()
 {
     files startupfiles;
 
-    std::vector<std::string> ast = files.loadfile("files.txt");
-    std::vector<std::string> code = files.loadfile("files2.txt");
+    std::vector<std::string> ast = startupfiles.loadfile("files.txt");
+    std::vector<std::string> code = startupfiles.loadfile("files2.txt");
 
     for(std::string i : ast)
     {
