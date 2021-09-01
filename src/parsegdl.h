@@ -93,17 +93,28 @@ class codedata
         std::vector<abstract_function> functions;
         std::vector<abstract_keyword> keywords;
         std::vector<abstract_common> commons;
+
+        void parseast(std::string name); //assigns to the codedata object info
+
+    private:
+        //these are the string parsing helper functions for parseast()
+        std::string getfunctionname(std::string line);
+        std::string getvarrefname(std::string line);
+        std::string getparamname(std::string line);
+        std::string getfunctioncall(std::string line);
+        std::string getcommonname(std::string line);
+        int getfunctioncallline(std::string line);
+        int getfunctionline(std::string line);
+        int getvarrefline(std::string line);
+        int getcommonline(std::string line);
+
 };
 
-struct files
+class files
 {
-    std::vector<std::string> asts;
-    std::vector<std::string> codes;
+    public:
+        std::vector<std::string> asts;
+        std::vector<std::string> codes;
+
+        std::vector<std::string> loadfile(std::string name);
 };
-//returns a vector of strings from a file
-extern std::vector<std::string> loadfile(std::string name);
-
-//returns a codedata() object representing the structure of the codebase
-extern codedata parseast(std::string name, codedata output);
-
-
