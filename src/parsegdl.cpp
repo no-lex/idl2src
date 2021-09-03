@@ -223,7 +223,7 @@ int codedata::getcommonline(std::string line)
                                 Code Parsing
 
  =============================================================================*/
-uint loc_in_line(std::string name, int line, std::string fnname)
+uint codedata::loc_in_line(std::string name, int line, std::string fnname)
 {
     files file;
 

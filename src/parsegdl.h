@@ -112,6 +112,7 @@ class codedata
         int getfunctionline(std::string line);
         int getvarrefline(std::string line);
         int getcommonline(std::string line);
+        uint loc_in_line(std::string name, int line, std::string fnname);
 
 };
 
