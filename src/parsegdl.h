@@ -4,15 +4,17 @@ class function_call
     public:
         std::vector<std::string> fn_called_keywords;               //the keywords referenced by name
         std::string fn_reference;                                  //the name of the referenced function
-        int ref_loc;
-        int ref_loc_in_line;
+        int ref_loc;                                               //line where the function was referenced
+        int ref_loc_in_line;                                       //# of chars from beginning of line where function was referenced
         bool is_procedure;                                         //whether the function is a function (0) or procedure (1)
-        function_call(std::string reference, int loc, int ref_in_line, bool pro)
+
+        function_call(std::string reference, int loc, int ref_in_line, bool pro, std::vector<std::string> fn_called)
         {
             fn_reference = reference;
             ref_loc = loc;
             ref_loc_in_line = ref_in_line;
             is_procedure = pro;
+            fn_called_keywords = fn_called;
         }
 };
 

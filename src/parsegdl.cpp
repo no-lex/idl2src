@@ -238,6 +238,61 @@ uint codedata::loc_in_line(std::string name, int line, std::string fnname)
     return codeline.find(fnname) + 1; //+1 to resolve fencepost error
 }
 
+//returns the std::string subset of the passed vector of strings that corresponds to a nesting
+std::vector<std::string> getcallbody(std::vector<std::string> fxnbody, int callline)
+{
+    long unsigned int callline_depth = fxnbody.at(callline).find("<");
+    int block = 0;
+    for(unsigned int i = callline + 1; i < fxnbody.size(); ++i)
+    {
+        block = i;
+        if(callline_depth >= fxnbody.at(i).find("<") || callline_depth >= fxnbody.at(i).find(">"))
+        {
+            break;
+        }
+    }
+
+    std::vector<std::string> output;
+    // !FIXME slow algorithm
+    for(int i = callline + 1; i < block; ++i)
+    {
+        output.push_back(fxnbody.at(i));
+    }
+    return output;
+}
+
+//deletes the local names for variables (which always come one line after !=! calls)
+std::vector<std::string> removelocalnames(std::vector<std::string> fxnbody)
+{
+    for(unsigned int i = 0; i < fxnbody.size(); ++i)
+    {
+        if(fxnbody.at(i).find("!=!") != std::string::npos)
+        {
+            std::cout << fxnbody.at(i) << "!!!!!!!!!\n";
+            fxnbody.erase(fxnbody.begin() + i + 1, fxnbody.begin() + i + 3);
+        }
+    }
+    return fxnbody;
+}
+
+std::vector<std::string> removenonvariablenames(std::vector<std::string> fxnbody)
+{
+    for(unsigned int i = 0; i < fxnbody.size(); ++i)
+    {
+        //if fxnbody does not contain !=! and does not contain VAR
+        if(fxnbody.at(i).find("!=!") == std::string::npos && fxnbody.at(i).find("VAR") == std::string::npos)
+        {
+            std::cout << fxnbody.at(i) << "FAILED\n";
+            fxnbody.erase(fxnbody.begin() + i);
+            i--;
+        }
+        else
+        {
+            std::cout << fxnbody.at(i) << "PASSED\n";
+        }
+    }
+    return fxnbody;
+}
 /* parseast: adds to a codedata object information from given file
  *
  * Parameters:
@@ -329,8 +384,22 @@ void codedata::parseast(std::string name)
                     std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
                     std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
 
+                    //determine what keywords are being referenced by the function call
+
+                    std::vector<std::string> callbody = getcallbody(fxnbody, j);
+                    callbody = removelocalnames(callbody);
+                    callbody = removenonvariablenames(callbody);
+
+                    std::vector<std::string> callvarnames;
+                    std::cout << "start\n";
+                    for(std::string i : callbody)
+                    {
+                        callvarnames.push_back(getfunctioncall(i));
+                    }
+                    std::cout << "end\n";
+
                     int ref_line_loc = loc_in_line(name, getfunctioncallline(fxnbody.at(j)), getfunctioncall(fxnbody.at(j)));
-                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), ref_line_loc, callpro) );
+                    references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), ref_line_loc, callpro, callvarnames) );
 
                 }
                 if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)

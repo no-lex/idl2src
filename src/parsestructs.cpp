@@ -34,7 +34,6 @@ sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *w
     sourcetrail::NameHierarchy name = { "::", {} };
     name.nameElements.emplace_back( sourcetrail::NameElement({ pro_to_str(ispro), parent, ""}) );
     int pid = writer->recordSymbol(name);
-    writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
     writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FUNCTION);
 
     name.nameElements.emplace_back( sourcetrail::NameElement({ "keyword", str, "" }) );
@@ -111,8 +110,8 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             std::string refname = data.functions.at(i).fn_references.at(j).fn_reference;
             if(std::find(data.functions.begin(), data.functions.end(), refname) != data.functions.end())
             {
-                int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname));
-                int refid = writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
+                int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname)),
+                    refid = writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
                 writer->recordReferenceLocation(refid, {fileId,
                                                         data.functions.at(i).fn_references.at(j).ref_loc,
                                                         data.functions.at(i).fn_references.at(j).ref_loc_in_line,
@@ -132,7 +131,20 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
                                                         data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
                                                        });
             }
+            for(uint k = 0; k < data.functions.at(i).fn_references.at(j).fn_called_keywords.size(); ++k)
+            {
+                std::string calledname = data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k);
+                int id = writer->recordSymbol(to_name_hierarchy(writer,
+                                                                data.functions.at(i).fn_references.at(j).fn_reference,
+                                                                data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k),
+                                                                data.functions.at(i).fn_references.at(j).is_procedure)
+                                              );
+
+                writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
+                writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+            }
         }
+
         //referenced system vars
         for(uint j = 0; j < data.functions.at(i).var_references.size(); ++j)
         {
