@@ -18,6 +18,20 @@ class function_call
         }
 };
 
+//a representation of the information relating to parameters without a keydecl call
+class abstract_implicit
+{
+    public:
+        int argnum;
+        std::string name;
+
+        abstract_implicit(int arg, std::string abs_name)
+        {
+            argnum = arg;
+            name = abs_name;
+        }
+};
+
 //a representation of a function
 class abstract_function
 {
@@ -32,7 +46,7 @@ class abstract_function
         std::string name;                                       //std::string representation of function name
         bool is_procedure;                                      //whether the function is a function (0) or procedure (1)
         int loc_in_line;                                        //how far from the beginning of the line the beginning of the function name is
-
+        std::vector<abstract_implicit> implicit_keywords;       //vector containing information on implicit keywords
         abstract_function(int location,
                           int funcsize,
                           std::string filename,
@@ -42,7 +56,8 @@ class abstract_function
                           std::vector<std::string> vreferences,
                           std::vector<int> vrefs_loc,
                           bool pro,
-                          int line_loc)
+                          int line_loc,
+                          std::vector<abstract_implicit> implicits)
         {
             loc = location;
             size = funcsize;
@@ -54,6 +69,7 @@ class abstract_function
             var_refs_loc = vrefs_loc;
             is_procedure = pro;
             loc_in_line = line_loc;
+            implicit_keywords = implicits;
         }
 
         bool operator==(std::string cmp)

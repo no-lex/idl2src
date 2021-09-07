@@ -293,6 +293,60 @@ std::vector<std::string> removenonvariablenames(std::vector<std::string> fxnbody
     }
     return fxnbody;
 }
+
+//determines the number of implicit arguments the function has
+std::vector<abstract_implicit> getimplicitargs(std::vector<std::string> file, int callline)
+{
+
+    std::vector<std::string> signature;
+    std::vector<abstract_implicit> implicits;
+    for(int i = callline - 1; i < file.size(); ++i)
+    {
+        std::cout << file.at(i) << "DEBUG_IMPLICIT_SEL\n";
+        signature.push_back(file.at(i));
+        if(file.at(i).find("$") == std::string::npos) //stop adding lines if no $ to extend line
+        {
+            std::cout << "line" << file.at(i) << file.at(i).find("$") <<"doesn't contain $\n";
+            break;
+        }
+    }
+    //now remove the beginning of the string(s) until we try to remove a section
+    //containing an = (an explicit keyword)
+    for(int i = 0; i < signature.size(); ++i)
+    {
+        int index = -1;
+        std::string temp = signature.at(i);
+        do
+        {
+            index++;
+            std::string sel = temp.substr(0, temp.find(','));
+            if(sel.find("=") != std::string::npos)
+            {
+                temp.erase(temp.begin(), temp.begin() + temp.find(',') + 1);
+            }
+            else
+            {
+                if(index > 0)
+                {
+                    implicits.emplace_back( abstract_implicit( index, temp.substr(0, temp.find(',')) ) );
+                }
+                temp.erase(temp.begin(), temp.begin() + temp.find(',') + 1);
+                std::cout << temp << "DEBUG_IMPLICIT\n";
+            }
+        } while(temp.find(",") != std::string::npos); //while the string has a comma
+    }
+    return implicits;
+}
+
+std::vector<std::string> getcodefile(std::string name)
+{
+    files file;
+    name.erase(name.begin() + name.find(".txt"), name.end());
+    name.append(".pro");
+    std::vector<std::string> fileinfo = file.loadfile(name);
+    return fileinfo;
+}
+
 /* parseast: adds to a codedata object information from given file
  *
  * Parameters:
@@ -326,6 +380,12 @@ void codedata::parseast(std::string name)
             {
                 ispro = false;
             }
+
+            //count number of implicit arguments
+
+            std::vector<std::string> codefile = getcodefile(name);
+            std::cout << getfunctionline(file.at(i)) << "DEBUG_IMPLCIT LINE\n";
+            std::vector<abstract_implicit> implicits = getimplicitargs(codefile, getfunctionline(file.at(i)));
 
             //param listings start 2 lines below FUNCTION line
             uint start = i + 2,
@@ -425,7 +485,8 @@ void codedata::parseast(std::string name)
                                                      varreferences,
                                                      varrefs_loc,
                                                      ispro,
-                                                     line_loc));
+                                                     line_loc,
+                                                     implicits));
         }
         if(file.at(i).find("]commondef(") != std::string::npos)
         {
