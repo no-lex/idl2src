@@ -268,7 +268,6 @@ std::vector<std::string> removelocalnames(std::vector<std::string> fxnbody)
     {
         if(fxnbody.at(i).find("!=!") != std::string::npos)
         {
-            std::cout << fxnbody.at(i) << "!!!!!!!!!\n";
             fxnbody.erase(fxnbody.begin() + i + 1, fxnbody.begin() + i + 3);
         }
     }
@@ -282,13 +281,8 @@ std::vector<std::string> removenonvariablenames(std::vector<std::string> fxnbody
         //if fxnbody does not contain !=! and does not contain VAR
         if(fxnbody.at(i).find("!=!") == std::string::npos && fxnbody.at(i).find("VAR") == std::string::npos)
         {
-            std::cout << fxnbody.at(i) << "FAILED\n";
             fxnbody.erase(fxnbody.begin() + i);
             i--;
-        }
-        else
-        {
-            std::cout << fxnbody.at(i) << "PASSED\n";
         }
     }
     return fxnbody;
@@ -302,11 +296,9 @@ std::vector<abstract_implicit> getimplicitargs(std::vector<std::string> file, in
     std::vector<abstract_implicit> implicits;
     for(int i = callline - 1; i < file.size(); ++i)
     {
-        std::cout << file.at(i) << "DEBUG_IMPLICIT_SEL\n";
         signature.push_back(file.at(i));
         if(file.at(i).find("$") == std::string::npos) //stop adding lines if no $ to extend line
         {
-            std::cout << "line" << file.at(i) << file.at(i).find("$") <<"doesn't contain $\n";
             break;
         }
     }
@@ -331,7 +323,6 @@ std::vector<abstract_implicit> getimplicitargs(std::vector<std::string> file, in
                     implicits.emplace_back( abstract_implicit( index, temp.substr(0, temp.find(',')) ) );
                 }
                 temp.erase(temp.begin(), temp.begin() + temp.find(',') + 1);
-                std::cout << temp << "DEBUG_IMPLICIT\n";
             }
         } while(temp.find(",") != std::string::npos); //while the string has a comma
     }
@@ -363,10 +354,6 @@ void codedata::parseast(std::string name)
 
     for(uint i = 0; i < file.size(); ++i)
     {
-        std::cout << file.at(i) << "\n";
-    }
-    for(uint i = 0; i < file.size(); ++i)
-    {
         //get the function and its parameters
         if(file.at(i).find("]FUNCTION(") != std::string::npos || file.at(i).find("]PRO(") != std::string::npos)
         {
@@ -384,7 +371,6 @@ void codedata::parseast(std::string name)
             //count number of implicit arguments
 
             std::vector<std::string> codefile = getcodefile(name);
-            std::cout << getfunctionline(file.at(i)) << "DEBUG_IMPLCIT LINE\n";
             std::vector<abstract_implicit> implicits = getimplicitargs(codefile, getfunctionline(file.at(i)));
 
             //param listings start 2 lines below FUNCTION line
@@ -402,11 +388,8 @@ void codedata::parseast(std::string name)
             std::copy(file.begin() + start, file.begin() + end, paradecl.begin());
             for(uint j = 0; j < paradecl.size(); ++j)
             {
-                std::cout << getparamname(paradecl[j]) << "\n";
                 args.emplace_back(getparamname(paradecl[j]));
             }
-
-            std::cout << getfunctionname(file.at(i)) << " " << getfunctionline(file.at(i)) << "\n";
 
             //function references
             uint bodystart = end,
@@ -421,7 +404,6 @@ void codedata::parseast(std::string name)
             }
             std::vector<std::string> fxnbody(bodyend-bodystart);
             std::copy(file.begin() + bodystart, file.begin() + bodyend, fxnbody.begin());
-            std::cout << "size " << bodystart << " " << bodyend << "\n";
 
             std::vector<function_call> references;
             std::vector<std::string> varreferences;
@@ -441,8 +423,6 @@ void codedata::parseast(std::string name)
                     {
                         callpro = false;
                     }
-                    std::cout << getfunctioncall(fxnbody.at(j)) << "\n";
-                    std::cout << getfunctioncallline(fxnbody.at(j)) << "\n";
 
                     //determine what keywords are being referenced by the function call
 
@@ -451,12 +431,10 @@ void codedata::parseast(std::string name)
                     callbody = removenonvariablenames(callbody);
 
                     std::vector<std::string> callvarnames;
-                    std::cout << "start\n";
                     for(std::string i : callbody)
                     {
                         callvarnames.push_back(getfunctioncall(i));
                     }
-                    std::cout << "end\n";
 
                     int ref_line_loc = loc_in_line(name, getfunctioncallline(fxnbody.at(j)), getfunctioncall(fxnbody.at(j)));
                     references.emplace_back( function_call(getfunctioncall(fxnbody.at(j)), getfunctioncallline(fxnbody.at(j)), ref_line_loc, callpro, callvarnames) );
@@ -464,9 +442,7 @@ void codedata::parseast(std::string name)
                 }
                 if(fxnbody.at(j).find("]SYSVAR") != std::string::npos)
                 {
-                    std::cout << getvarrefname(fxnbody.at(j)) << "\n";
                     varreferences.emplace_back(getvarrefname(fxnbody.at(j)));
-                    std::cout << getvarrefline(fxnbody.at(j)) << "\n";
                     varrefs_loc.emplace_back(getvarrefline(fxnbody.at(j)));
                 }
             }
@@ -490,8 +466,6 @@ void codedata::parseast(std::string name)
         }
         if(file.at(i).find("]commondef(") != std::string::npos)
         {
-            std::cout << getcommonname(file.at(i)) << "\n";
-            std::cout << getcommonline(file.at(i)) << "\n";
             commons.emplace_back(abstract_common(getcommonline(file.at(i)), name, getcommonname(file.at(i))));
         }
     }
