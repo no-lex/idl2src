@@ -223,7 +223,7 @@ int codedata::getcommonline(std::string line)
                                 Code Parsing
 
  =============================================================================*/
-uint codedata::loc_in_line(std::string name, int line, std::string fnname)
+unsigned int codedata::loc_in_line(std::string name, int line, std::string fnname)
 {
     files file;
 
@@ -294,7 +294,7 @@ std::vector<abstract_implicit> getimplicitargs(std::vector<std::string> file, in
 
     std::vector<std::string> signature;
     std::vector<abstract_implicit> implicits;
-    for(int i = callline - 1; i < file.size(); ++i)
+    for(unsigned int i = callline - 1; i < file.size(); ++i)
     {
         signature.push_back(file.at(i));
         if(file.at(i).find("$") == std::string::npos) //stop adding lines if no $ to extend line
@@ -304,7 +304,7 @@ std::vector<abstract_implicit> getimplicitargs(std::vector<std::string> file, in
     }
     //now remove the beginning of the string(s) until we try to remove a section
     //containing an = (an explicit keyword)
-    for(int i = 0; i < signature.size(); ++i)
+    for(unsigned int i = 0; i < signature.size(); ++i)
     {
         int index = -1;
         std::string temp = signature.at(i);
@@ -352,7 +352,7 @@ void codedata::parseast(std::string name)
     std::vector<std::string> file = dummy_file.loadfile(name);
     std::vector<std::string> args(0);
 
-    for(uint i = 0; i < file.size(); ++i)
+    for(unsigned int i = 0; i < file.size(); ++i)
     {
         //get the function and its parameters
         if(file.at(i).find("]FUNCTION(") != std::string::npos || file.at(i).find("]PRO(") != std::string::npos)
@@ -374,9 +374,9 @@ void codedata::parseast(std::string name)
             std::vector<abstract_implicit> implicits = getimplicitargs(codefile, getfunctionline(file.at(i)));
 
             //param listings start 2 lines below FUNCTION line
-            uint start = i + 2,
-                 end = i + 3;
-            for(uint j = start; j < file.size(); ++j)
+            unsigned int start = i + 2,
+                           end = i + 3;
+            for(unsigned int j = start; j < file.size(); ++j)
             {
                 if(file.at(j).find("key") == std::string::npos)
                 {
@@ -386,15 +386,15 @@ void codedata::parseast(std::string name)
             }
             std::vector<std::string> paradecl(end-start);
             std::copy(file.begin() + start, file.begin() + end, paradecl.begin());
-            for(uint j = 0; j < paradecl.size(); ++j)
+            for(unsigned int j = 0; j < paradecl.size(); ++j)
             {
                 args.emplace_back(getparamname(paradecl[j]));
             }
 
             //function references
-            uint bodystart = end,
-                 bodyend =   end + 1;
-            for(uint j = start; j < file.size(); ++j)
+            unsigned int bodystart = end,
+                         bodyend =   end + 1;
+            for(unsigned int j = start; j < file.size(); ++j)
             {
                 if(file.at(j) == ">")
                 {
@@ -409,7 +409,7 @@ void codedata::parseast(std::string name)
             std::vector<std::string> varreferences;
             std::vector<int> refs_loc;
             std::vector<int> varrefs_loc;
-            for(uint j = 0; j < fxnbody.size(); ++j)
+            for(unsigned int j = 0; j < fxnbody.size(); ++j)
             {
                 if((fxnbody.at(j).find("]fcall") != std::string::npos) || (fxnbody.at(j).find("]pcall") != std::string::npos))
                 {
