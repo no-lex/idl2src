@@ -32,6 +32,7 @@ int main(int argc, char **argv)
     //handle input arguments
     const char * name = "default.srctrldb";
 
+    bool nolink = false;
     std::string path1;
     std::string path2;
     for(int i = 1; i < argc; i++)
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
                     std::cout << "  -v    print out version information and exit\n";
                     std::cout << "  -f    name of file to index\n";
                     std::cout << "  -n    name of database to output";
+                    std::cout << "  -l    disables linking functions";
                     exit(0);
                 }
                 case 'f':
@@ -69,6 +71,11 @@ int main(int argc, char **argv)
                     name = argv[i + 1];
                     break;
                 }
+                case 'l':
+                {
+                    nolink = true;
+                    std::cout << "Skipping linking step\n";
+                }
             }
         }
     }
@@ -85,7 +92,7 @@ int main(int argc, char **argv)
     {
         std::cout << i << "\n";
     }
-    parse(output, writer, sfiles);
+    parse(output, writer, sfiles, nolink);
     closedb(writer);
 }
 

@@ -101,7 +101,7 @@ std::string getname(std::string ast, files file)
     return file.codes.at(loc);
 }
 
-void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
+void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, bool nolink)
 {
     writer->beginTransaction();
     std::vector<int> ids;
@@ -152,6 +152,12 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
         writer->recordSymbolKind(id, sourcetrail::SymbolKind::STRUCT);
         writer->recordSymbolDefinitionKind(id, sourcetrail::DefinitionKind::EXPLICIT);
         writer->recordSymbolLocation(id, {fileId, loc, 1, loc, 2});
+    }
+    //skip the rest of the writing if we don't want to link in the database
+    if(nolink)
+    {
+        writer->commitTransaction();
+        return;
     }
     //function linking
     for(uint i = 0; i < data.functions.size(); ++i)
