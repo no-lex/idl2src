@@ -70,12 +70,29 @@ bool getfunctionimplicit(codedata data, std::string name, int index)
             }
             return true;
         }
-        else
-        {
-            return false;
-        }
     }
     return false;
+}
+
+//gets the parameter name at position index for the given function
+std::string getimplicitname(codedata data, std::string name, int index)
+{
+    for(abstract_function i : data.functions)
+    {
+        if(i.name.find(name) != std::string::npos)
+        {
+            for(abstract_implicit j : i.implicit_keywords)
+            {
+                std::cout << j.name << "\n";
+                if(j.argnum = index)
+                {
+                    return j.name;
+                }
+            }
+            return "";
+        }
+    }
+    return "";
 }
 //returns the string for a code file name given an ast file name
 std::string getname(std::string ast, files file)
@@ -119,7 +136,9 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
         //non-explicit keywords
         for(uint j = 0; j < data.functions.at(i).implicit_keywords.size(); ++j)
         {
-            writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).implicit_keywords.at(j).name,  data.functions.at(i).is_procedure) );
+            int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).implicit_keywords.at(j).name, data.functions.at(i).is_procedure) );
+            writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
+            writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
         }
     }
     //directly referenced common blocks
@@ -169,6 +188,17 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
             {
                 if(getfunctionimplicit(data, data.functions.at(i).fn_references.at(j).fn_reference, k))
                 {
+                    int id = writer->recordSymbol(to_name_hierarchy(writer,
+                                                                    data.functions.at(i).fn_references.at(j).fn_reference,
+                                                                    getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k),
+                                                                    data.functions.at(i).fn_references.at(j).is_procedure)
+                                                  );
+                    writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
+                    writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+                    std::cout << "implicit argument found called " << getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k) << "\n";
+                }
+                else
+                {
                     std::string calledname = data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k);
                     int id = writer->recordSymbol(to_name_hierarchy(writer,
                                                                     data.functions.at(i).fn_references.at(j).fn_reference,
@@ -178,10 +208,6 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file)
 
                     writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
                     writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
-                }
-                else
-                {
-                    std::cout << "rejected implicit keyword" << data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k) << "\n";
                 }
             }
         }
