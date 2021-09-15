@@ -35,8 +35,11 @@ int main(int argc, char **argv)
     codedata output;
 
     bool nolink = false;
+    bool serialize = false; //toggles writing the codedata object to file at the end
+
     std::string path1;
     std::string path2;
+
     for(int i = 1; i < argc; i++)
     {
         if(argv[i][0]=='-')
@@ -54,7 +57,8 @@ int main(int argc, char **argv)
                     std::cout << "  -h    print this usage and exit\n";
                     std::cout << "  -v    print out version information and exit\n";
                     std::cout << "  -f    name of file to index\n";
-                    std::cout << "  -t    name of tempoary database to import\n;";
+                    std::cout << "  -s    serialize the database to this file\n;";
+                    std::cout << "  -d    deserialize the database into program memory\n";
                     std::cout << "  -n    name of database to output";
                     std::cout << "  -l    disables linking functions";
                     exit(0);
@@ -69,9 +73,14 @@ int main(int argc, char **argv)
                     std::cout << path2 << "\n";
                     break;
                 }
-                case 't':
+                case 'd':
                 {
                     output = deserialize(argv[i + 1]);
+                    break;
+                }
+                case 's':
+                {
+                    serialize = true;
                     break;
                 }
                 case 'n':
