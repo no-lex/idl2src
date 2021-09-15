@@ -8,6 +8,7 @@
 
 #include "parsegdl.h"
 #include "parsestructs.h"
+#include "serialize.h"
 
 files loadfiles()
 {
@@ -31,6 +32,7 @@ int main(int argc, char **argv)
 {
     //handle input arguments
     const char * name = "default.srctrldb";
+    codedata output;
 
     bool nolink = false;
     std::string path1;
@@ -52,6 +54,7 @@ int main(int argc, char **argv)
                     std::cout << "  -h    print this usage and exit\n";
                     std::cout << "  -v    print out version information and exit\n";
                     std::cout << "  -f    name of file to index\n";
+                    std::cout << "  -t    name of tempoary database to import\n;";
                     std::cout << "  -n    name of database to output";
                     std::cout << "  -l    disables linking functions";
                     exit(0);
@@ -64,6 +67,11 @@ int main(int argc, char **argv)
                     path2.append(".txt");
                     std::cout << path1 << "\n";
                     std::cout << path2 << "\n";
+                    break;
+                }
+                case 't':
+                {
+                    output = deserialize(argv[i + 1]);
                     break;
                 }
                 case 'n':
@@ -83,7 +91,6 @@ int main(int argc, char **argv)
     files sfiles = { {path2}, {path1} };
 
     sourcetrail::SourcetrailDBWriter *writer = createdb(name);
-    codedata output;
     for(std::string i : sfiles.asts)
     {
         output.parseast(i);
