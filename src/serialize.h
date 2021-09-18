@@ -1,3 +1,3 @@
 
-void serialize(codedata data, std::string name);
+void serialize_codedata(codedata data, std::string name);
 codedata deserialize(std::string name);

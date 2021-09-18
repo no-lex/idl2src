@@ -109,6 +109,10 @@ int main(int argc, char **argv)
         std::cout << i << "\n";
     }
     parse(output, writer, sfiles, nolink);
+    if(serialize)
+    {
+        serialize_codedata(output, "temp.txt");
+    }
     closedb(writer);
 }
 

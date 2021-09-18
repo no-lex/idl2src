@@ -15,8 +15,26 @@
 
 #include "parsegdl.h"
 
-void serialize(codedata data, std::string name)
+void serialize_codedata(codedata data, std::string name)
 {
+    std::ofstream file;
+    file.open(name);
+    for(abstract_function i : data.functions)
+    {
+        file << "=== FUNCTION ===\n";
+        file << i.name << "\n";
+        file << "=== IMPLICIT NAMES ===\n";
+        for(abstract_implicit j : i.implicit_keywords)
+        {
+            file << j.name << "\n";
+        }
+        file << "=== IMPLICIT NUMS ===\n";
+        for(abstract_implicit j : i.implicit_keywords)
+        {
+            file << j.argnum << "\n";
+        }
+    }
+    file.close();
 }
 
 codedata deserialize(std::string name)

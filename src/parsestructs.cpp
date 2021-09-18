@@ -201,7 +201,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, 
                                                   );
                     writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
                     writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
-                    std::cout << "implicit argument found called " << getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k) << "\n";
+                    //std::cout << "implicit argument found called " << getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k) << "\n";
                 }
                 else
                 {
