@@ -6,7 +6,7 @@ all: idl2src
 
 idl2src : main.o parsegdl.o parsestructs.o serialize.o
 		g++ $(CXXFLAGS) $(INCLUDES) -o idl2src main.o parsegdl.o parsestructs.o serialize.o lib/libsourcetraildb.a -ldl
-		mv main.o parsegdl.o parsestructs.o ./src/
+		mv main.o parsegdl.o parsestructs.o serialize.o ./src/
 
 main.o :
 		g++ $(CXXFLAGS) $(INCLUDES) -c src/main.cpp
