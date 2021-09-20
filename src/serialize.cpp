@@ -33,12 +33,23 @@ void serialize_codedata(codedata data, std::string name)
         {
             file << j.argnum << "\n";
         }
+        file << "=== END ===\n";
     }
     file.close();
 }
 
-codedata deserialize(std::string name)
+codedata deserialize_codedata(std::string name)
 {
     codedata data;
+
+    files dummy_file;
+
+    std::vector<std::string> lines = dummy_file.loadfile("temp1.txt");
+
+    for(unsigned int i = 0; i < lines.size() ; ++i)
+    {
+        std::cout << lines.at(i) << "\n";
+    }
+
     return data;
 }

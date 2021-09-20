@@ -47,6 +47,22 @@ class abstract_function
         bool is_procedure;                                      //whether the function is a function (0) or procedure (1)
         int loc_in_line;                                        //how far from the beginning of the line the beginning of the function name is
         std::vector<abstract_implicit> implicit_keywords;       //vector containing information on implicit keywords
+
+        abstract_function()
+        {
+            loc = -1;
+            size = -1;
+            file = "";
+            name = "";
+            params = {};
+            fn_references = {};
+            var_references = {};
+            var_refs_loc = {};
+            is_procedure = false;
+            loc_in_line = -1;
+            implicit_keywords = {};
+        }
+
         abstract_function(int location,
                           int funcsize,
                           std::string filename,

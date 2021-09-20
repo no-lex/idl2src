@@ -75,7 +75,7 @@ int main(int argc, char **argv)
                 }
                 case 'd':
                 {
-                    output = deserialize(argv[i + 1]);
+                    output = deserialize_codedata(argv[i + 1]);
                     break;
                 }
                 case 's':

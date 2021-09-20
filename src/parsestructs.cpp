@@ -83,7 +83,6 @@ std::string getimplicitname(codedata data, std::string name, int index)
         {
             for(abstract_implicit j : i.implicit_keywords)
             {
-                std::cout << j.name << "\n";
                 if(j.argnum = index)
                 {
                     return j.name;
