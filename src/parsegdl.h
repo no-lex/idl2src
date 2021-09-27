@@ -47,6 +47,7 @@ class abstract_function
         bool is_procedure;                                      //whether the function is a function (0) or procedure (1)
         int loc_in_line;                                        //how far from the beginning of the line the beginning of the function name is
         std::vector<abstract_implicit> implicit_keywords;       //vector containing information on implicit keywords
+        bool local;
 
         abstract_function()
         {
@@ -86,6 +87,7 @@ class abstract_function
             is_procedure = pro;
             loc_in_line = line_loc;
             implicit_keywords = implicits;
+            local = true;
         }
 
         bool operator==(std::string cmp)
