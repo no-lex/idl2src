@@ -53,8 +53,8 @@ class abstract_function
         {
             loc = -1;
             size = -1;
-            file = "";
-            name = "";
+            file = "dummy";
+            name = "dummy";
             params = {};
             fn_references = {};
             var_references = {};

@@ -96,6 +96,10 @@ std::string getimplicitname(codedata data, std::string name, int index)
 //returns the string for a code file name given an ast file name
 std::string getname(std::string ast, files file)
 {
+    if(ast == "dummy")
+    {
+        return "";
+    }
     int loc = std::distance(file.asts.begin(), std::find(file.asts.begin(), file.asts.end(), ast));
     return file.codes.at(loc);
 }
@@ -164,73 +168,70 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, 
     //function linking
     for(unsigned int i = 0; i < data.functions.size(); ++i)
     {
-        if(data.functions.at(i).local)
+        int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
+        //referenced functions
+        for(unsigned int j = 0; j < data.functions.at(i).fn_references.size(); ++j)
         {
-            int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
-            //referenced functions
-            for(unsigned int j = 0; j < data.functions.at(i).fn_references.size(); ++j)
+            std::string refname = data.functions.at(i).fn_references.at(j).fn_reference;
+            if(std::find(data.functions.begin(), data.functions.end(), refname) != data.functions.end())
             {
-                std::string refname = data.functions.at(i).fn_references.at(j).fn_reference;
-                if(std::find(data.functions.begin(), data.functions.end(), refname) != data.functions.end())
+                int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname)),
+                    refid = writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
+                writer->recordReferenceLocation(refid, {fileId,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
+                                                       });
+            }
+            else
+            {
+                int id = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).fn_references.at(j).is_procedure), refname, ""} } });
+                writer->recordSymbolKind(id, sourcetrail::SymbolKind::FUNCTION);
+                int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
+                writer->recordReferenceLocation(refid, {fileId,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc,
+                                                        data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
+                                                       });
+            }
+            for(unsigned int k = 0; k < data.functions.at(i).fn_references.at(j).fn_called_keywords.size(); ++k)
+            {
+                if(getfunctionimplicit(data, data.functions.at(i).fn_references.at(j).fn_reference, k))
                 {
-                    int dist = std::distance(data.functions.begin(), std::find(data.functions.begin(), data.functions.end(), refname)),
-                        refid = writer->recordReference(ids[i], ids[dist], sourcetrail::ReferenceKind::CALL);
-                    writer->recordReferenceLocation(refid, {fileId,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc_in_line,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
-                                                           });
+                    int id = writer->recordSymbol(to_name_hierarchy(writer,
+                                                                    data.functions.at(i).fn_references.at(j).fn_reference,
+                                                                    getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k),
+                                                                    data.functions.at(i).fn_references.at(j).is_procedure)
+                                                  );
+                    writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
+                    writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+                    //std::cout << "implicit argument found called " << getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k) << "\n";
                 }
                 else
                 {
-                    int id = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).fn_references.at(j).is_procedure), refname, ""} } });
-                    writer->recordSymbolKind(id, sourcetrail::SymbolKind::FUNCTION);
-                    int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::CALL);
-                    writer->recordReferenceLocation(refid, {fileId,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc_in_line,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc,
-                                                            data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
-                                                           });
-                }
-                for(unsigned int k = 0; k < data.functions.at(i).fn_references.at(j).fn_called_keywords.size(); ++k)
-                {
-                    if(getfunctionimplicit(data, data.functions.at(i).fn_references.at(j).fn_reference, k))
-                    {
-                        int id = writer->recordSymbol(to_name_hierarchy(writer,
-                                                                        data.functions.at(i).fn_references.at(j).fn_reference,
-                                                                        getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k),
-                                                                        data.functions.at(i).fn_references.at(j).is_procedure)
-                                                      );
-                        writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
-                        writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
-                        //std::cout << "implicit argument found called " << getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k) << "\n";
-                    }
-                    else
-                    {
-                        std::string calledname = data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k);
-                        int id = writer->recordSymbol(to_name_hierarchy(writer,
-                                                                        data.functions.at(i).fn_references.at(j).fn_reference,
-                                                                        data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k),
-                                                                        data.functions.at(i).fn_references.at(j).is_procedure)
-                                                      );
+                    std::string calledname = data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k);
+                    int id = writer->recordSymbol(to_name_hierarchy(writer,
+                                                                    data.functions.at(i).fn_references.at(j).fn_reference,
+                                                                    data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k),
+                                                                    data.functions.at(i).fn_references.at(j).is_procedure)
+                                                  );
 
-                        writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
-                        writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
-                    }
+                    writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
+                    writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
                 }
             }
-            //referenced system vars
-            for(unsigned int j = 0; j < data.functions.at(i).var_references.size(); ++j)
-            {
-                std::string refname = data.functions.at(i).var_references.at(j);
+        }
+        //referenced system vars
+        for(unsigned int j = 0; j < data.functions.at(i).var_references.size(); ++j)
+        {
+            std::string refname = data.functions.at(i).var_references.at(j);
 
-                int id = writer->recordSymbol({ "::", { { "system variable", refname, ""} } });
-                writer->recordSymbolKind(id, sourcetrail::SymbolKind::GLOBAL_VARIABLE);
-                int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
-                writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_references.at(j).ref_loc, 1, data.functions.at(i).fn_references.at(j).ref_loc, 2});
-            }
+            int id = writer->recordSymbol({ "::", { { "system variable", refname, ""} } });
+            writer->recordSymbolKind(id, sourcetrail::SymbolKind::GLOBAL_VARIABLE);
+            int refid = writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+            writer->recordReferenceLocation(refid, {fileId, data.functions.at(i).fn_references.at(j).ref_loc, 1, data.functions.at(i).fn_references.at(j).ref_loc, 2});
         }
     }
     writer->commitTransaction();
