@@ -57,7 +57,7 @@ int main(int argc, char **argv)
                     std::cout << "  -h    print this usage and exit\n";
                     std::cout << "  -v    print out version information and exit\n";
                     std::cout << "  -f    name of file to index\n";
-                    std::cout << "  -s    serialize the database to this file\n;";
+                    std::cout << "  -s    serialize the database to this file\n";
                     std::cout << "  -d    deserialize the database into program memory\n";
                     std::cout << "  -n    name of database to output";
                     std::cout << "  -l    disables linking functions";
