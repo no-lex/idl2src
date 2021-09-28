@@ -44,7 +44,7 @@ codedata deserialize_codedata(std::string name)
 
     files dummy_file;
 
-    std::vector<std::string> lines = dummy_file.loadfile("temp1.txt");
+    std::vector<std::string> lines = dummy_file.loadfile(name);
 
     std::vector<std::vector<std::string>> functionstack;
 

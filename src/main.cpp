@@ -40,6 +40,8 @@ int main(int argc, char **argv)
     std::string path1;
     std::string path2;
 
+    std::string outfile; //name of file for serializer to write out
+
     for(int i = 1; i < argc; i++)
     {
         if(argv[i][0]=='-')
@@ -81,6 +83,7 @@ int main(int argc, char **argv)
                 case 's':
                 {
                     serialize = true;
+                    outfile = argv[i + 1];
                     break;
                 }
                 case 'n':
@@ -111,7 +114,7 @@ int main(int argc, char **argv)
     parse(output, writer, sfiles, nolink);
     if(serialize)
     {
-        serialize_codedata(output, "temp.txt");
+        serialize_codedata(output, outfile);
     }
     closedb(writer);
 }
