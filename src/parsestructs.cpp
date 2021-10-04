@@ -100,7 +100,7 @@ std::string getname(std::string ast, files file)
     {
         return "";
     }
-    int loc = std::distance(file.asts.begin(), std::find(file.asts.begin(), file.asts.end(), ast));
+    unsigned int loc = std::distance(file.asts.begin(), std::find(file.asts.begin(), file.asts.end(), ast));
     if(loc >= file.codes.size())
     {
         return "";
