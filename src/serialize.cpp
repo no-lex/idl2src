@@ -70,14 +70,6 @@ codedata deserialize_codedata(std::string name)
         }
     }
 
-    for(std::vector<std::string> i : functionstack)
-    {
-        for(std::string j : i)
-        {
-            std::cout << j << "PRINTOUT\n";
-        }
-        std::cout << "\n";
-    }
     //parse generated function stack
     for(std::vector<std::string> i : functionstack)
     {
@@ -86,12 +78,9 @@ codedata deserialize_codedata(std::string name)
         //pass 1: function name
         for(unsigned int j = 0; j < i.size(); ++j)
         {
-            std::cout << i.at(j) << "FN\n";
-
             if(i.at(j).find("=== LOCATION ===") != std::string::npos)
             {
                 idx = j;
-                std::cout << "\n";
                 break;
             }
             if(i.at(j).find("===") != std::string::npos)
@@ -100,7 +89,6 @@ codedata deserialize_codedata(std::string name)
             }
             else
             {
-                //std::cout << i.at(j) << "FN\n";
                 func.name = i.at(j);
             }
             idx = j;
@@ -108,12 +96,9 @@ codedata deserialize_codedata(std::string name)
         //pass 2: function location
         for(unsigned int j = idx; j < i.size(); ++j)
         {
-            std::cout << i.at(j) << "LOC\n";
-
             if(i.at(j).find("=== IMPLICIT NAMES ===") != std::string::npos)
             {
                 idx = j;
-                std::cout << "\n";
                 break;
             }
             if(i.at(j).find("===") != std::string::npos)
@@ -122,7 +107,6 @@ codedata deserialize_codedata(std::string name)
             }
             else
             {
-                //std::cout << i.at(j) << "FN\n";
                 func.file = i.at(j);
             }
             idx = j;
@@ -130,12 +114,9 @@ codedata deserialize_codedata(std::string name)
         //pass 3: names of implicit parameters
         for(unsigned int j = idx; j < i.size(); ++j)
         {
-                std::cout << i.at(j) << "IMP\n";
-
             if(i.at(j).find("=== IMPLICIT NUMS ===") != std::string::npos)
             {
                 idx = j;
-                std::cout << "\n";
                 break;
             }
             if(i.at(j).find("===") != std::string::npos)
@@ -155,11 +136,8 @@ codedata deserialize_codedata(std::string name)
 
         for(unsigned int j = idx; j < i.size(); ++j)
         {
-            std::cout << i.at(j) << "IMP_NUM\n";
-
             if(i.at(j).find("=== END ===") != std::string::npos)
             {
-                std::cout << "\n";
                 break;
             }
             if(i.at(j).find("===") != std::string::npos)
