@@ -9,12 +9,12 @@
 echo $1
 b="${1%.*}".txt
 echo $b
-echo ".compile" $1 > temp.txt
-echo "exit" >> temp.txt
-gdl < temp.txt > $b
+echo ".compile" $1 > tempexe.txt
+echo "exit" >> tempexe.txt
+gdl < tempexe.txt > $b
 
 #index the file
-./idl2src -f "${1%.*}" -n $2
+./idl2src -f "${1%.*}" -d "tempdb.txt" -s "tempdb.txt" -n $2
 
 #delete txt file
 rm "${1%.*}".txt
