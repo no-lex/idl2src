@@ -23,6 +23,8 @@ void serialize_codedata(codedata data, std::string name)
     {
         file << "=== FUNCTION ===\n";
         file << i.name << "\n";
+        file << "=== LOCATION ===\n";
+        file << i.file << "\n";
         file << "=== IMPLICIT NAMES ===\n";
         for(abstract_implicit j : i.implicit_keywords)
         {
@@ -86,7 +88,7 @@ codedata deserialize_codedata(std::string name)
         {
             std::cout << i.at(j) << "FN\n";
 
-            if(i.at(j).find("=== IMPLICIT NAMES ===") != std::string::npos)
+            if(i.at(j).find("=== LOCATION ===") != std::string::npos)
             {
                 idx = j;
                 std::cout << "\n";
@@ -103,7 +105,29 @@ codedata deserialize_codedata(std::string name)
             }
             idx = j;
         }
-        //pass 2: names of implicit parameters
+        //pass 2: function location
+        for(unsigned int j = idx; j < i.size(); ++j)
+        {
+            std::cout << i.at(j) << "LOC\n";
+
+            if(i.at(j).find("=== IMPLICIT NAMES ===") != std::string::npos)
+            {
+                idx = j;
+                std::cout << "\n";
+                break;
+            }
+            if(i.at(j).find("===") != std::string::npos)
+            {
+                //nothing atm, skip these structuring lines
+            }
+            else
+            {
+                //std::cout << i.at(j) << "FN\n";
+                func.file = i.at(j);
+            }
+            idx = j;
+        }
+        //pass 3: names of implicit parameters
         for(unsigned int j = idx; j < i.size(); ++j)
         {
                 std::cout << i.at(j) << "IMP\n";
@@ -126,7 +150,7 @@ codedata deserialize_codedata(std::string name)
             }
             idx = j;
         }
-        //pass 3: locations of implicit parameters
+        //pass 4: locations of implicit parameters
         unsigned int index = 0;
 
         for(unsigned int j = idx; j < i.size(); ++j)
@@ -144,7 +168,6 @@ codedata deserialize_codedata(std::string name)
             }
             else
             {
-                std::cout << i.at(j) << "IMP_F\n";
                 func.implicit_keywords.at(index).argnum = std::stoi(i.at(j));
                 index++;
             }

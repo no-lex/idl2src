@@ -101,6 +101,10 @@ std::string getname(std::string ast, files file)
         return "";
     }
     int loc = std::distance(file.asts.begin(), std::find(file.asts.begin(), file.asts.end(), ast));
+    if(loc >= file.codes.size())
+    {
+        return "";
+    }
     return file.codes.at(loc);
 }
 
@@ -111,40 +115,37 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, 
     //define directly referenced functions first to ensure linking works
     for(unsigned int i = 0; i < data.functions.size(); ++i)
     {
-        if(data.functions.at(i).local)
+        int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
+        std::string fnname = data.functions.at(i).name;
+        int loc = data.functions.at(i).loc; //line of function definition
+        int loc_in = data.functions.at(i).loc_in_line; //location in line of function definition
+
+        //construct list of parameters (keywords)
+        std::string paramstring = ": ";
+        for(unsigned int j = 0; j < data.functions.at(i).params.size(); ++j)
         {
-            int fileId = writer->recordFile(getname(data.functions.at(i).file, file));
-            std::string fnname = data.functions.at(i).name;
-            int loc = data.functions.at(i).loc; //line of function definition
-            int loc_in = data.functions.at(i).loc_in_line; //location in line of function definition
+            paramstring.append(data.functions.at(i).params.at(j)).append(", ");
+        }
+        int fid = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).is_procedure), fnname, "" } } });
 
-            //construct list of parameters (keywords)
-            std::string paramstring = ": ";
-            for(unsigned int j = 0; j < data.functions.at(i).params.size(); ++j)
-            {
-                paramstring.append(data.functions.at(i).params.at(j)).append(", ");
-            }
-            int fid = writer->recordSymbol({ "::", { { pro_to_str(data.functions.at(i).is_procedure), fnname, "" } } });
+        writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
+        writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
+        writer->recordSymbolLocation(fid, {fileId, loc, loc_in, loc, loc_in + static_cast<int>(data.functions.at(i).name.size()) - 1});
+        ids.push_back(fid);
 
-            writer->recordSymbolDefinitionKind(fid, sourcetrail::DefinitionKind::EXPLICIT);
-            writer->recordSymbolKind(fid, sourcetrail::SymbolKind::FUNCTION);
-            writer->recordSymbolLocation(fid, {fileId, loc, loc_in, loc, loc_in + static_cast<int>(data.functions.at(i).name.size()) - 1});
-            ids.push_back(fid);
-
-            for(unsigned int j = 0; j < data.functions.at(i).params.size(); ++j)
-            {
-                int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), data.functions.at(i).is_procedure) );
-                writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
-                writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
-                writer->recordSymbolLocation(pid, {fileId, loc, loc_in, loc, loc_in + static_cast<int>(data.functions.at(i).name.size()) - 1});
-            }
-            //non-explicit keywords
-            for(unsigned int j = 0; j < data.functions.at(i).implicit_keywords.size(); ++j)
-            {
-                int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).implicit_keywords.at(j).name, data.functions.at(i).is_procedure) );
-                writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
-                writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
-            }
+        for(unsigned int j = 0; j < data.functions.at(i).params.size(); ++j)
+        {
+            int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(j), data.functions.at(i).is_procedure) );
+            writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
+            writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
+            writer->recordSymbolLocation(pid, {fileId, loc, loc_in, loc, loc_in + static_cast<int>(data.functions.at(i).name.size()) - 1});
+        }
+        //non-explicit keywords
+        for(unsigned int j = 0; j < data.functions.at(i).implicit_keywords.size(); ++j)
+        {
+            int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).implicit_keywords.at(j).name, data.functions.at(i).is_procedure) );
+            writer->recordSymbolDefinitionKind(pid, sourcetrail::DefinitionKind::EXPLICIT);
+            writer->recordSymbolKind(pid, sourcetrail::SymbolKind::FIELD);
         }
     }
     //directly referenced common blocks
