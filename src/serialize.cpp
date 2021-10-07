@@ -18,11 +18,11 @@
 //writes data to a file at path "name", in plaintext, using
 //strings delineated by === to separate data fields
 //given a codedata object and using its functions vector (of abstract_function)
-void serialize_codedata(codedata data, std::string name)
+void codedata::serialize(std::string name)
 {
     std::ofstream file;
     file.open(name);
-    for(abstract_function i : data.functions)
+    for(abstract_function i : functions)
     {
         file << "=== FUNCTION ===\n";
         file << i.name << "\n";
@@ -47,10 +47,8 @@ void serialize_codedata(codedata data, std::string name)
     file.close();
 }
 
-codedata deserialize_codedata(std::string name)
+void codedata::deserialize(std::string name)
 {
-    codedata data;
-
     files dummy_file;
 
     std::vector<std::string> lines = dummy_file.loadfile(name);
@@ -182,7 +180,6 @@ codedata deserialize_codedata(std::string name)
             }
         }
         func.local = false;
-        data.functions.push_back(func);
+        functions.push_back(func);
     }
-    return data;
 }

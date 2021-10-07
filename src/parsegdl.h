@@ -137,6 +137,9 @@ class codedata
 
         void parseast(std::string name); //assigns to the codedata object info
 
+        //serialization/deserialization
+        void serialize(std::string name);
+        void deserialize(std::string name);
     private:
         //these are the string parsing helper functions for parseast()
         std::string getfunctionname(std::string line);

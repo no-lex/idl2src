@@ -8,7 +8,6 @@
 
 #include "parsegdl.h"
 #include "parsestructs.h"
-#include "serialize.h"
 
 files loadfiles()
 {
@@ -77,7 +76,7 @@ int main(int argc, char **argv)
                 }
                 case 'd':
                 {
-                    output = deserialize_codedata(argv[i + 1]);
+                    output.deserialize(argv[i + 1]);
                     break;
                 }
                 case 's':
@@ -114,7 +113,7 @@ int main(int argc, char **argv)
     parse(output, writer, sfiles, nolink);
     if(serialize)
     {
-        serialize_codedata(output, outfile);
+        output.serialize(outfile);
     }
     closedb(writer);
 }
