@@ -23,6 +23,10 @@ void serialize_codedata(codedata data, std::string name)
     {
         file << "=== FUNCTION ===\n";
         file << i.name << "\n";
+
+        file << "=== ISPRO ===\n";
+        file << (i.is_procedure ? "1" : "0") << "\n";
+
         file << "=== LOCATION ===\n";
         file << i.file << "\n";
         file << "=== IMPLICIT NAMES ===\n";
@@ -78,7 +82,7 @@ codedata deserialize_codedata(std::string name)
         //pass 1: function name
         for(unsigned int j = 0; j < i.size(); ++j)
         {
-            if(i.at(j).find("=== LOCATION ===") != std::string::npos)
+            if(i.at(j).find("=== ISPRO ===") != std::string::npos)
             {
                 idx = j;
                 break;
@@ -93,7 +97,25 @@ codedata deserialize_codedata(std::string name)
             }
             idx = j;
         }
-        //pass 2: function location
+        //pass 2: function name
+        for(unsigned int j = 0; j < i.size(); ++j)
+        {
+            if(i.at(j).find("=== LOCATION ===") != std::string::npos)
+            {
+                idx = j;
+                break;
+            }
+            if(i.at(j).find("===") != std::string::npos)
+            {
+                //nothing atm, skip these structuring lines
+            }
+            else
+            {
+                func.is_procedure = i.at(j) == "1" ? true : false;
+            }
+            idx = j;
+        }
+        //pass 3: function location
         for(unsigned int j = idx; j < i.size(); ++j)
         {
             if(i.at(j).find("=== IMPLICIT NAMES ===") != std::string::npos)
@@ -111,7 +133,7 @@ codedata deserialize_codedata(std::string name)
             }
             idx = j;
         }
-        //pass 3: names of implicit parameters
+        //pass 4: names of implicit parameters
         for(unsigned int j = idx; j < i.size(); ++j)
         {
             if(i.at(j).find("=== IMPLICIT NUMS ===") != std::string::npos)
@@ -131,7 +153,7 @@ codedata deserialize_codedata(std::string name)
             }
             idx = j;
         }
-        //pass 4: locations of implicit parameters
+        //pass 5: locations of implicit parameters
         unsigned int index = 0;
 
         for(unsigned int j = idx; j < i.size(); ++j)
