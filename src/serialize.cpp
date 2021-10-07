@@ -15,6 +15,9 @@
 
 #include "parsegdl.h"
 
+//writes data to a file at path "name", in plaintext, using
+//strings delineated by === to separate data fields
+//given a codedata object and using its functions vector (of abstract_function)
 void serialize_codedata(codedata data, std::string name)
 {
     std::ofstream file;
@@ -75,6 +78,12 @@ codedata deserialize_codedata(std::string name)
     }
 
     //parse generated function stack
+    /* index i monotonically increases using the sub indices j, which loop
+     * through specific parts of the file
+     * for each function data in the function stack (all lines from the file which
+     * correspond to a specific abstract_function object)
+     *
+     */
     for(std::vector<std::string> i : functionstack)
     {
         abstract_function func;
