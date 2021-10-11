@@ -42,9 +42,11 @@ jobs:
         cd ..
         pwd
         ls
-        cd ..
-        pwd
-        ls
+
+    - name: Get idl2src
+      uses: actions/checkout@v2
+      with:
+        repository: no-lex/idl2src
 
     - name: make
       run: make
