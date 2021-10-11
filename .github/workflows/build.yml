@@ -19,7 +19,7 @@ jobs:
     - name: Get GDL
       uses: actions/checkout@v2
       with:
-        name: gnudatalanguage/gdl
+        repository: gnudatalanguage/gdl
 
     - name: Build GDL
       run: |
