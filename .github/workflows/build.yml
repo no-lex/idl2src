@@ -34,4 +34,4 @@ jobs:
         cd ..
 
     - name: make
-      run: make
+      run: make -C..
