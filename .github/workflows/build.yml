@@ -32,6 +32,7 @@ jobs:
         scripts/build_gdl.sh build
         scripts/build_gdl.sh install
         cd ..
+        pwd
 
     - name: make
       run: make -C..
