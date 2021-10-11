@@ -22,6 +22,7 @@ jobs:
 
     - name: Build GDL
       run: |
+        ls
         cd gdl
         sed -i 's/\/\/#define GDL_DEBUG/#define GDL_DEBUG/g' src/dinterpreter.cpp
         scripts/build_gdl.sh prep
