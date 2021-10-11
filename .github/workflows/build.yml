@@ -34,6 +34,9 @@ jobs:
         cd ../idl2src
         pwd
         ls
+        cd ..
+        pwd
+        ls
 
     - name: make
       run: make
