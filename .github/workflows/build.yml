@@ -21,6 +21,7 @@ jobs:
         mkdir gdl
         cd gdl
         git clone https://github.com/gnudatalanguage/gdl
+        cd src
         ls
         sed -i 's/\/\/#define GDL_DEBUG/#define GDL_DEBUG/g' src/dinterpreter.cpp
         scripts/build_gdl.sh prep
