@@ -16,7 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    steps:
     - uses: actions/checkout@master
       with:
         name: gnudatalanguage/gdl
