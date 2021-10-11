@@ -16,6 +16,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Set GDL Dir
+      run: mkdir gdl && cd gdl
+
     - name: Get GDL
       uses: actions/checkout@v2
       with:
