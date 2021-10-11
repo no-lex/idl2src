@@ -22,6 +22,11 @@ jobs:
     - name: Get GDL
       uses: actions/checkout@v2
       with:
+        repository: no-lex/idl2src
+
+    - name: Get GDL
+      uses: actions/checkout@v2
+      with:
         repository: gnudatalanguage/gdl
 
     - name: Build GDL
@@ -32,6 +37,9 @@ jobs:
         pwd
         ls
         cd ../idl2src
+        pwd
+        ls
+        cd ..
         pwd
         ls
         cd ..
