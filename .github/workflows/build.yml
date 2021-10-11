@@ -31,11 +31,7 @@ jobs:
         scripts/build_gdl.sh configure
         scripts/build_gdl.sh build
         scripts/build_gdl.sh install
-        pwd
-        ls
-        cd ..
-        pwd
-        ls
+        cd ../idl2src
 
     - name: make
-      run: make -C..
+      run: make
