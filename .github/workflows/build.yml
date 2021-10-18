@@ -56,3 +56,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: EoRImaging/FHD
+
+    - name: Make Database
+      run: |
+        ls
+        ls ..
+        cp ../idl2src/idl2src idl2src
+        cp ../idl2src/run_indexer.sh run_indexer.sh
+        cp ../idl2src/ci_script.sh ci_script.sh
