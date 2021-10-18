@@ -67,4 +67,12 @@ jobs:
 
     - name: Build Database
       run: |
-        ./ci_script.sh
+        bash ci_script.sh
+
+    - name: Upload database artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: idl2src
+        path: |
+          ls
+          ./FHD.srctrldb
