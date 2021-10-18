@@ -78,6 +78,7 @@ jobs:
 
     - name: Build Database
       run: |
+        chmod 777 gdl
         bash ci_script.sh
 
     - name: Upload database artifact
@@ -85,6 +86,5 @@ jobs:
       with:
         name: idl2src
         path: |
-          ls
           ./FHD.srctrldb
           ./FHD.srctrlprj
