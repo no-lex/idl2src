@@ -80,7 +80,9 @@ jobs:
       run: |
         chmod 777 idl2src
         chmod 777 gdl
-        bash ci_script.sh
+        chmod 777 ci_script.sh
+        chmod 777 run_indexer.sh
+        ./ci_script.sh
         ls
 
     - name: Upload database artifact
