@@ -78,6 +78,7 @@ jobs:
 
     - name: Build Database
       run: |
+        chmod 777 idl2src
         chmod 777 gdl
         bash ci_script.sh
 
