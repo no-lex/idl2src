@@ -36,7 +36,13 @@ jobs:
         scripts/build_gdl.sh configure
         scripts/build_gdl.sh build
         scripts/build_gdl.sh install
-        cd ..
+        chmod 777 build/src/gdl
+
+    - name: Upload GDL binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: gdl
+        path: ./build/src/gdl
 
     - name: Get idl2src
       uses: actions/checkout@v2
@@ -65,6 +71,11 @@ jobs:
       with:
         name: idl2src
 
+    - name: Get gdl binary
+      uses: actions/download-artifact@v2
+      with:
+        name: gdl
+
     - name: Build Database
       run: |
         bash ci_script.sh
@@ -76,3 +87,4 @@ jobs:
         path: |
           ls
           ./FHD.srctrldb
+          ./FHD.srctrlprj
