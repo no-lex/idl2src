@@ -1,5 +1,7 @@
 # idl2src
 
+[![build](https://github.com/no-lex/idl2src/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/no-lex/idl2src/actions/workflows/build.yml)
+
 #### a GDL/IDL indexer for Sourcetrail
 
 ### Overview
