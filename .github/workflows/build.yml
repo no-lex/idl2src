@@ -92,3 +92,5 @@ jobs:
         path: |
           ./FHD.srctrldb
           ./FHD.srctrlprj
+          ./tempdb.txt
+          ./tempexe.txt
