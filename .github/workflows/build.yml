@@ -46,13 +46,13 @@ jobs:
     - name: make
       run: make
 
-    - name: Get FHD
-      uses: actions/checkout@v2
-      with:
-        repository: EoRImaging/FHD
-
     - name: Upload binary artifact
       uses: actions/upload-artifact@v2
       with:
         name: idl2src
         path: ./idl2src
+
+    - name: Get FHD
+      uses: actions/checkout@v2
+      with:
+        repository: EoRImaging/FHD
