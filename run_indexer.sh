@@ -14,6 +14,7 @@ echo "exit" >> tempexe.txt
 ./gdl < tempexe.txt > $b
 
 #index the file
+echo "${1%.*}"
 ./idl2src -f "${1%.*}" -d "tempdb.txt" -s "tempdb.txt" -n $2
 
 #delete txt file
