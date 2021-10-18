@@ -81,6 +81,7 @@ jobs:
         chmod 777 idl2src
         chmod 777 gdl
         bash ci_script.sh
+        ls
 
     - name: Upload database artifact
       uses: actions/upload-artifact@v2
