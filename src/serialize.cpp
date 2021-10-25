@@ -64,9 +64,9 @@ void codedata::deserialize(std::string name)
             for(unsigned int j = 0; j < i; ++j)
             {
                 functions.push_back(lines.at(j));
-                std::cout << lines.at(j) << "\n";
+                //std::cout << lines.at(j) << "\n";
             }
-            std::cout << lines.at(i) << "\n\n";
+            //std::cout << lines.at(i) << "\n\n";
 
             lines.erase(lines.begin(), lines.begin() + i + 1);
             i = 0; //go back to beginning
