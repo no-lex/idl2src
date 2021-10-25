@@ -268,7 +268,10 @@ std::vector<std::string> removelocalnames(std::vector<std::string> fxnbody)
     {
         if(fxnbody.at(i).find("!=!") != std::string::npos)
         {
-            fxnbody.erase(fxnbody.begin() + i + 1, fxnbody.begin() + i + 3);
+            if(i+3 < fxnbody.size())
+            {
+                fxnbody.erase(fxnbody.begin() + i + 1, fxnbody.begin() + i + 3);
+            }
         }
     }
     return fxnbody;
