@@ -274,6 +274,15 @@ std::vector<std::string> removelocalnames(std::vector<std::string> fxnbody)
     return fxnbody;
 }
 
+/* removenonvariablenames: takes a std::vector of std::string and returns only lines containing vars
+ *
+ * Parameters:
+ *  - std::vector<std::string> fxnbody: vector of strings containing AST information
+ *
+ * Returns:
+ *  - std::vector<std::string>: vector of strings containing only VAR or !=! in them
+ *
+ */
 std::vector<std::string> removenonvariablenames(std::vector<std::string> fxnbody)
 {
     for(unsigned int i = 0; i < fxnbody.size(); ++i)
@@ -329,6 +338,15 @@ std::vector<abstract_implicit> getimplicitargs(std::vector<std::string> file, in
     return implicits;
 }
 
+/* getcodefile: takes a .txt file name and changes its line ending to .pro
+ *
+ * Parameters:
+ *  - std::string name: path/name of file ending with .txt
+ *
+ * Returns:
+ *  - std::string containing name passed except with .pro at the end instead of .txt
+ *
+ */
 std::vector<std::string> getcodefile(std::string name)
 {
     files file;
