@@ -41,6 +41,7 @@ sourcetrail::NameHierarchy to_name_hierarchy(sourcetrail::SourcetrailDBWriter *w
     return name;
 }
 
+//creates a sourcetrail db that writes to the file name
 sourcetrail::SourcetrailDBWriter *createdb(const char * name)
 {
     sourcetrail::SourcetrailDBWriter *writer = new sourcetrail::SourcetrailDBWriter{};
@@ -108,6 +109,8 @@ std::string getname(std::string ast, files file)
     return file.codes.at(loc);
 }
 
+//given a codedata object to read from, a sourcetrailwriter to write to, and file list,
+//writes the codedata created in parsegdl to a sourcetrial writer
 void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, bool nolink)
 {
     writer->beginTransaction();
@@ -238,6 +241,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, 
     writer->commitTransaction();
 }
 
+//closes and deletes the pointer to the database passed
 void closedb(sourcetrail::SourcetrailDBWriter *writer)
 {
     writer->close();
