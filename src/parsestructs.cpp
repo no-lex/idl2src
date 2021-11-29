@@ -201,19 +201,39 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, 
                                                         data.functions.at(i).fn_references.at(j).ref_loc_in_line + static_cast<int>(data.functions.at(i).fn_references.at(j).fn_reference.size()) - 1
                                                        });
             }
+            //loop through all keywords within the function references
             for(unsigned int k = 0; k < data.functions.at(i).fn_references.at(j).fn_called_keywords.size(); ++k)
             {
+                //gets whether the parameter in position k has an implicit (non-explicit) name
                 if(getfunctionimplicit(data, data.functions.at(i).fn_references.at(j).fn_reference, k))
                 {
                     int id = writer->recordSymbol(to_name_hierarchy(writer,
-                                                                    data.functions.at(i).fn_references.at(j).fn_reference,
-                                                                    getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k),
-                                                                    data.functions.at(i).fn_references.at(j).is_procedure)
-                                                  );
+                                                data.functions.at(i).fn_references.at(j).fn_reference,
+                                                getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k),
+                                                data.functions.at(i).fn_references.at(j).is_procedure)
+                              );
                     writer->recordSymbolKind(id, sourcetrail::SymbolKind::FIELD);
-                    writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+                    //if the function has a keyword of the same name, connect the two
+                    std::string kwname = data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k);
+                    bool useparam = std::find(data.functions.at(i).params.begin(), data.functions.at(i).params.end(), kwname) != data.functions.at(i).params.end();
+                    int paramindex = std::distance(data.functions.at(i).params.begin(), std::find(data.functions.at(i).params.begin(), data.functions.at(i).params.end(), kwname));
+                    if(useparam)
+                    {
+                        /* ids[i] is the function id
+                         * id is the keyword id
+                         * USAGE is the type of link
+                         */
+                        std::string fnname = data.functions.at(i).name;
+                        int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(paramindex), data.functions.at(i).is_procedure) );
+                        writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+                    }
+                    else
+                    {
+                        writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+                    }
                     //std::cout << "implicit argument found called " << getimplicitname(data, data.functions.at(i).fn_references.at(j).fn_reference, k) << "\n";
                 }
+                //if the parameter is explicitly defined (name is defined in parameter list)
                 else
                 {
                     std::string calledname = data.functions.at(i).fn_references.at(j).fn_called_keywords.at(k);
