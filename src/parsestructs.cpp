@@ -225,7 +225,7 @@ void parse(codedata data, sourcetrail::SourcetrailDBWriter *writer, files file, 
                          */
                         std::string fnname = data.functions.at(i).name;
                         int pid = writer->recordSymbol(to_name_hierarchy(writer, fnname, data.functions.at(i).params.at(paramindex), data.functions.at(i).is_procedure) );
-                        writer->recordReference(ids[i], id, sourcetrail::ReferenceKind::USAGE);
+                        writer->recordReference(pid, id, sourcetrail::ReferenceKind::USAGE);
                     }
                     else
                     {
